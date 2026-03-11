@@ -64,4 +64,4 @@ Qantas Virtual is registered as a **VATSIM Virtual Airline Affiliate (VAA)**. We
 
 ---
 
-*Maintained by QFV VA Management · Version 1.0 · March 2025*
+*Maintained by QFV VA Management · Version 1.0 · March 2026*
