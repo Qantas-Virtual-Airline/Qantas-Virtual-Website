@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Qantas Virtual — QFV | VATSIM Virtual Airline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C8102E;
+    --dark-red: #8B0018;
+    --dark: #0F0F0F;
+    --mid: #2A2A2A;
+    --grey: #6B6B6B;
+    --light: #F5F5F5;
+    --white: #FFFFFF;
+    --border: rgba(200,16,46,0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--dark);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ─────────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 60px;
+    background: rgba(15,15,15,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--red);
+  }
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 1.4rem; letter-spacing: 2px;
+    color: var(--white); text-decoration: none;
+  }
+  .nav-logo span { color: var(--red); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600; font-size: 0.85rem; letter-spacing: 1.5px;
+    text-transform: uppercase; color: rgba(255,255,255,0.7);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--red); }
+  .nav-cta {
+    background: var(--red); color: white !important;
+    padding: 8px 20px; clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  }
+  .nav-cta:hover { background: var(--dark-red) !important; color: white !important; }
+
+  /* ── HERO ────────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 100px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(135deg, rgba(200,16,46,0.08) 0%, transparent 50%),
+      linear-gradient(to bottom, #0F0F0F 0%, #1a0508 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: linear-gradient(var(--red) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--red) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-accent {
+    position: absolute; top: 0; left: 0;
+    width: 6px; height: 100%;
+    background: linear-gradient(to bottom, var(--red), transparent);
+  }
+  .hero-content { position: relative; max-width: 900px; }
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600; font-size: 0.8rem; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--red);
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 0.9; letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+  .hero-title .outline {
+    -webkit-text-stroke: 2px rgba(255,255,255,0.2);
+    color: transparent;
+  }
+  .hero-title .red { color: var(--red); }
+  .hero-sub {
+    font-size: 1.1rem; font-weight: 300; color: rgba(255,255,255,0.6);
+    line-height: 1.7; max-width: 560px; margin-bottom: 40px;
+  }
+  .hero-badges {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 40px;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600; font-size: 0.75rem; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 6px 14px;
+    border: 1px solid rgba(200,16,46,0.4);
+    color: rgba(255,255,255,0.7);
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  }
+  .badge.active { background: rgba(200,16,46,0.15); border-color: var(--red); color: var(--red); }
+  .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.9rem; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none;
+    background: var(--red); color: white;
+    padding: 14px 32px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: background 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--dark-red); transform: translateY(-2px); }
+  .btn-ghost {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.9rem; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.8);
+    padding: 14px 32px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--red); color: var(--red); }
+
+  .hero-stats {
+    position: absolute; bottom: 40px; right: 40px;
+    display: flex; gap: 40px;
+  }
+  .stat { text-align: right; }
+  .stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 2.4rem; color: var(--red);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: rgba(255,255,255,0.4);
+  }
+
+  /* ── SECTION BASE ────────────────────────────────────── */
+  section { padding: 80px 40px; }
+  .section-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.75rem; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--red);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1; margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 1rem; font-weight: 300; color: rgba(255,255,255,0.5);
+    max-width: 560px; line-height: 1.7; margin-bottom: 48px;
+  }
+  .red-line {
+    width: 48px; height: 3px; background: var(--red); margin-bottom: 40px;
+  }
+
+  /* ── MANDATORY TOOLS ─────────────────────────────────── */
+  #tools { background: var(--mid); position: relative; overflow: hidden; }
+  #tools::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--red), transparent);
+  }
+  .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 40px; }
+  .tool-card {
+    background: rgba(255,255,255,0.03);
+    padding: 40px; position: relative; overflow: hidden;
+    border: 1px solid rgba(200,16,46,0.15);
+    transition: border-color 0.3s;
+  }
+  .tool-card:hover { border-color: var(--red); }
+  .tool-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%; background: var(--red);
+  }
+  .tool-icon { font-size: 2.5rem; margin-bottom: 16px; }
+  .tool-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 1.6rem; letter-spacing: 1px;
+    margin-bottom: 8px; color: white;
+  }
+  .tool-url {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600; font-size: 0.8rem; letter-spacing: 2px;
+    color: var(--red); text-transform: uppercase; margin-bottom: 16px;
+  }
+  .tool-desc {
+    font-size: 0.9rem; color: rgba(255,255,255,0.55); line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .tool-warning {
+    display: flex; align-items: flex-start; gap: 8px;
+    background: rgba(200,16,46,0.1); border: 1px solid rgba(200,16,46,0.3);
+    padding: 12px; font-size: 0.8rem; color: rgba(255,180,180,0.9); line-height: 1.5;
+  }
+
+  /* ── FLEET ───────────────────────────────────────────── */
+  #fleet { background: var(--dark); }
+  .fleet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2px; }
+  .aircraft-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    overflow: hidden; position: relative;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: default;
+  }
+  .aircraft-card:hover { border-color: var(--red); transform: translateY(-4px); }
+  .aircraft-card-header {
+    background: linear-gradient(135deg, #1a0508, #2a0a10);
+    padding: 24px; position: relative;
+    border-bottom: 2px solid var(--red);
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .aircraft-icao {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 2.2rem; color: var(--red);
+    line-height: 1; letter-spacing: 1px;
+  }
+  .aircraft-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.85rem; letter-spacing: 1px;
+    color: rgba(255,255,255,0.7); margin-top: 4px;
+  }
+  .rank-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.7rem; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 4px 10px;
+    background: rgba(200,16,46,0.2); border: 1px solid var(--red);
+    color: var(--red); white-space: nowrap;
+  }
+  .aircraft-card-body { padding: 20px 24px; }
+  .aircraft-role {
+    font-size: 0.85rem; color: rgba(255,255,255,0.5);
+    margin-bottom: 16px; line-height: 1.5;
+  }
+  .aircraft-specs { display: flex; flex-direction: column; gap: 8px; }
+  .spec-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.8rem; padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-key { color: rgba(255,255,255,0.4); }
+  .spec-val { font-weight: 600; color: rgba(255,255,255,0.85); text-align: right; }
+
+  /* ── ROUTES ──────────────────────────────────────────── */
+  #routes { background: var(--mid); }
+  .route-tabs {
+    display: flex; gap: 2px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .route-tab {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.8rem; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 10px 20px;
+    background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.1); cursor: pointer;
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+    transition: all 0.2s;
+  }
+  .route-tab.active, .route-tab:hover {
+    background: var(--red); color: white; border-color: var(--red);
+  }
+  .route-table-wrap { overflow-x: auto; }
+  .route-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .route-table th {
+    background: #1C1C1C; padding: 12px 16px; text-align: left;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.75rem; letter-spacing: 2px;
+    text-transform: uppercase; color: rgba(255,255,255,0.5);
+    border-bottom: 2px solid var(--red);
+  }
+  .route-table td {
+    padding: 11px 16px; border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.8);
+  }
+  .route-table tr:hover td { background: rgba(200,16,46,0.05); }
+  .route-table .flight-no {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.95rem; color: var(--red);
+  }
+  .route-table .icao {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.95rem;
+  }
+  .route-panel { display: none; }
+  .route-panel.active { display: block; }
+
+  /* ── RANKS ───────────────────────────────────────────── */
+  #ranks { background: var(--dark); }
+  .rank-track {
+    position: relative;
+    display: flex; flex-direction: column; gap: 0;
+  }
+  .rank-track::before {
+    content: ''; position: absolute; left: 28px; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(to bottom, var(--red), rgba(200,16,46,0.1));
+  }
+  .rank-row {
+    display: flex; align-items: center; gap: 24px;
+    padding: 20px 0; position: relative;
+  }
+  .rank-dot {
+    width: 58px; height: 58px; flex-shrink: 0;
+    background: var(--mid); border: 2px solid var(--red);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 1rem; color: var(--red);
+    position: relative; z-index: 1;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .rank-info { flex: 1; }
+  .rank-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 1.1rem; color: white; margin-bottom: 2px;
+  }
+  .rank-hours {
+    font-size: 0.8rem; color: var(--red); font-weight: 600; margin-bottom: 4px;
+  }
+  .rank-access { font-size: 0.8rem; color: rgba(255,255,255,0.45); line-height: 1.4; }
+
+  /* ── DOCS ────────────────────────────────────────────── */
+  #docs { background: var(--mid); }
+  .docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2px; }
+  .doc-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 28px; position: relative; overflow: hidden;
+    transition: border-color 0.3s;
+    text-decoration: none; color: inherit; display: block;
+  }
+  .doc-card:hover { border-color: var(--red); }
+  .doc-card::after {
+    content: '→';
+    position: absolute; top: 24px; right: 24px;
+    font-size: 1.2rem; color: rgba(200,16,46,0.4);
+    transition: color 0.2s, transform 0.2s;
+  }
+  .doc-card:hover::after { color: var(--red); transform: translateX(4px); }
+  .doc-type {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.7rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--red); margin-bottom: 8px;
+  }
+  .doc-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 1.15rem; color: white;
+    line-height: 1.2; margin-bottom: 8px;
+  }
+  .doc-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
+
+  /* ── JOIN ────────────────────────────────────────────── */
+  #join {
+    background: linear-gradient(135deg, #1a0508 0%, var(--dark) 100%);
+    border-top: 3px solid var(--red); text-align: center;
+  }
+  .join-steps {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px; margin: 40px 0; text-align: left;
+  }
+  .join-step {
+    padding: 28px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    position: relative;
+  }
+  .join-step-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 3rem; color: rgba(200,16,46,0.2);
+    line-height: 1; margin-bottom: 8px;
+  }
+  .join-step-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 1rem; color: white;
+    margin-bottom: 8px;
+  }
+  .join-step-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
+
+  /* ── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: #0a0a0a;
+    border-top: 2px solid var(--red);
+    padding: 32px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 1.2rem; letter-spacing: 2px; color: white;
+  }
+  .footer-logo span { color: var(--red); }
+  .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .footer-links a {
+    font-size: 0.8rem; color: rgba(255,255,255,0.4);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--red); }
+  .footer-note { font-size: 0.75rem; color: rgba(255,255,255,0.25); }
+
+  /* ── ANIMATIONS ──────────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.7s ease forwards; }
+  .fade-up:nth-child(2) { animation-delay: 0.1s; }
+  .fade-up:nth-child(3) { animation-delay: 0.2s; }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    section { padding: 60px 20px; }
+    .hero { padding: 90px 20px 80px; }
+    .hero-stats { position: relative; bottom: auto; right: auto; flex-direction: row; margin-top: 40px; }
+    .tools-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; text-align: center; padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><span>Q</span>ANTAS VIRTUAL</a>
+  <ul class="nav-links">
+    <li><a href="#fleet">Fleet</a></li>
+    <li><a href="#routes">Routes</a></li>
+    <li><a href="#ranks">Ranks</a></li>
+    <li><a href="#docs">Documents</a></li>
+    <li><a href="#join" class="nav-cta">JOIN NOW</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow fade-up">✈ Virtual Airline · VATSIM · Est. 2025</p>
+    <h1 class="hero-title fade-up">
+      <span class="red">QANTAS</span><br>
+      <span class="outline">VIRTUAL</span>
+    </h1>
+    <p class="hero-sub fade-up">Australia's premium virtual airline on the VATSIM network. Fly real Qantas routes with full SOPs, SimBrief planning, and professional flight logging.</p>
+    <div class="hero-badges fade-up">
+      <span class="badge active">VATSIM VAA</span>
+      <span class="badge">ICAO: QFV</span>
+      <span class="badge">5 Active Pilots</span>
+      <span class="badge">5 Aircraft Types</span>
+    </div>
+    <div class="hero-cta fade-up">
+      <a href="#join" class="btn-primary">Join the Airline</a>
+      <a href="#docs" class="btn-ghost">View Documents</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Aircraft Types</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">30+</div>
+      <div class="stat-label">Active Routes</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">7</div>
+      <div class="stat-label">Pilot Ranks</div>
+    </div>
+  </div>
+</section>
+
+<!-- MANDATORY TOOLS -->
+<section id="tools">
+  <div class="section-eyebrow">Required On Every Flight</div>
+  <h2 class="section-title">Mandatory Tools</h2>
+  <p class="section-sub">Every QFV flight requires both tools. No exceptions. Flights without SimBrief planning or Flight Logger submissions will not count toward your hours or rank.</p>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-icon">🗺️</div>
+      <div class="tool-name">SimBrief</div>
+      <div class="tool-url">simbrief.com</div>
+      <div class="tool-desc">Generate a full Operational Flight Plan before every departure. SimBrief provides routing, fuel calculations, weather, NOTAMs, weight & balance, and performance data. Load your OFP directly into your simulator FMS.</div>
+      <div class="tool-warning">⚠ Flights without a SimBrief OFP will NOT count toward hours or rank progression.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📋</div>
+      <div class="tool-name">Flight Logger</div>
+      <div class="tool-url">QFV Discord Bot</div>
+      <div class="tool-desc">The official QFV flight logging bot, available in our Discord server. Log every completed flight immediately after landing. Required fields: Flight Number · Aircraft Type · Departure · Arrival · Block Time.</div>
+      <div class="tool-warning">⚠ Flights not logged via Flight Logger will NOT count. No manual submissions accepted.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FLEET -->
+<section id="fleet">
+  <div class="section-eyebrow">QFV Fleet</div>
+  <h2 class="section-title">Our Aircraft</h2>
+  <div class="red-line"></div>
+  <div class="fleet-grid">
+
+    <div class="aircraft-card">
+      <div class="aircraft-card-header">
+        <div>
+          <div class="aircraft-icao">B738</div>
+          <div class="aircraft-name">Boeing 737-800</div>
+        </div>
+        <div class="rank-badge">R1 Cadet</div>
+      </div>
+      <div class="aircraft-card-body">
+        <div class="aircraft-role">Short to medium-haul domestic & regional. QFV's primary domestic workhorse.</div>
+        <div class="aircraft-specs">
+          <div class="spec-row"><span class="spec-key">Cruise Altitude</span><span class="spec-val">33,000–41,000 ft</span></div>
+          <div class="spec-row"><span class="spec-key">Range</span><span class="spec-val">4,800 km / 2,990 nm</span></div>
+          <div class="spec-row"><span class="spec-key">Cruise Mach</span><span class="spec-val">M0.785</span></div>
+          <div class="spec-row"><span class="spec-key">Engines</span><span class="spec-val">CFM56-7B</span></div>
+          <div class="spec-row"><span class="spec-key">SimBrief Code</span><span class="spec-val">B738</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="aircraft-card">
+      <div class="aircraft-card-header">
+        <div>
+          <div class="aircraft-icao">A21N</div>
+          <div class="aircraft-name">Airbus A321XLR</div>
+        </div>
+        <div class="rank-badge">R2 2nd Officer</div>
+      </div>
+      <div class="aircraft-card-body">
+        <div class="aircraft-role">Domestic & short-haul international. Replacing the 737-800 from 2025.</div>
+        <div class="aircraft-specs">
+          <div class="spec-row"><span class="spec-key">Cruise Altitude</span><span class="spec-val">FL370–FL410</span></div>
+          <div class="spec-row"><span class="spec-key">Range</span><span class="spec-val">8,700 km / 4,700 nm</span></div>
+          <div class="spec-row"><span class="spec-key">Cruise Mach</span><span class="spec-val">M0.79</span></div>
+          <div class="spec-row"><span class="spec-key">Engines</span><span class="spec-val">CFM LEAP-1A</span></div>
+          <div class="spec-row"><span class="spec-key">SimBrief Code</span><span class="spec-val">A21N</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="aircraft-card">
+      <div class="aircraft-card-header">
+        <div>
+          <div class="aircraft-icao">A332/33</div>
+          <div class="aircraft-name">Airbus A330-200 & 300</div>
+        </div>
+        <div class="rank-badge">R3 1st Officer</div>
+      </div>
+      <div class="aircraft-card-body">
+        <div class="aircraft-role">Medium to long-haul international. ETOPS-180 rated. Being phased out from 2027.</div>
+        <div class="aircraft-specs">
+          <div class="spec-row"><span class="spec-key">Cruise Altitude</span><span class="spec-val">FL330–FL390</span></div>
+          <div class="spec-row"><span class="spec-key">Range A332</span><span class="spec-val">13,400 km / 7,250 nm</span></div>
+          <div class="spec-row"><span class="spec-key">Cruise Mach</span><span class="spec-val">M0.82</span></div>
+          <div class="spec-row"><span class="spec-key">Engines</span><span class="spec-val">RR Trent 772B / GE CF6</span></div>
+          <div class="spec-row"><span class="spec-key">SimBrief Code</span><span class="spec-val">A332 / A333</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="aircraft-card">
+      <div class="aircraft-card-header">
+        <div>
+          <div class="aircraft-icao">B789</div>
+          <div class="aircraft-name">Boeing 787-9 Dreamliner</div>
+        </div>
+        <div class="rank-badge">R4 Sr 1st Officer</div>
+      </div>
+      <div class="aircraft-card-body">
+        <div class="aircraft-role">Long-haul international workhorse. Qantas operates 14 in service.</div>
+        <div class="aircraft-specs">
+          <div class="spec-row"><span class="spec-key">Cruise Altitude</span><span class="spec-val">35,000–43,000 ft</span></div>
+          <div class="spec-row"><span class="spec-key">Range</span><span class="spec-val">14,498 km / 9,008 nm</span></div>
+          <div class="spec-row"><span class="spec-key">Cruise Mach</span><span class="spec-val">M0.85</span></div>
+          <div class="spec-row"><span class="spec-key">Engines</span><span class="spec-val">GEnx-1B74/75</span></div>
+          <div class="spec-row"><span class="spec-key">SimBrief Code</span><span class="spec-val">B789</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="aircraft-card">
+      <div class="aircraft-card-header">
+        <div>
+          <div class="aircraft-icao">A388</div>
+          <div class="aircraft-name">Airbus A380-800</div>
+        </div>
+        <div class="rank-badge">R5 Captain + Endorse</div>
+      </div>
+      <div class="aircraft-card-body">
+        <div class="aircraft-role">Ultra-long-haul flagship. QFV's most prestigious type. Endorsement required.</div>
+        <div class="aircraft-specs">
+          <div class="spec-row"><span class="spec-key">Cruise Altitude</span><span class="spec-val">FL310–FL390</span></div>
+          <div class="spec-row"><span class="spec-key">Range</span><span class="spec-val">15,200 km / 8,200 nm</span></div>
+          <div class="spec-row"><span class="spec-key">Cruise Mach</span><span class="spec-val">M0.85</span></div>
+          <div class="spec-row"><span class="spec-key">Engines</span><span class="spec-val">RR Trent 970 (×4)</span></div>
+          <div class="spec-row"><span class="spec-key">SimBrief Code</span><span class="spec-val">A388</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ROUTES -->
+<section id="routes">
+  <div class="section-eyebrow">Network</div>
+  <h2 class="section-title">Route Network</h2>
+  <p class="section-sub">All routes modelled on real Qantas Airways operations. Plan every flight via SimBrief and log it with Flight Logger.</p>
+  <div class="route-tabs">
+    <button class="route-tab active" onclick="showRoutes('domestic')">Domestic</button>
+    <button class="route-tab" onclick="showRoutes('tasman')">Trans-Tasman</button>
+    <button class="route-tab" onclick="showRoutes('intl-short')">Short Intl</button>
+    <button class="route-tab" onclick="showRoutes('intl-long')">Long-Haul</button>
+  </div>
+
+  <div id="domestic" class="route-panel active">
+    <div class="route-table-wrap">
+      <table class="route-table">
+        <thead><tr><th>Flight</th><th>From</th><th>To</th><th>Aircraft</th><th>Block Time</th></tr></thead>
+        <tbody>
+          <tr><td class="flight-no">QFV400/401</td><td class="icao">SYD</td><td class="icao">MEL</td><td>B738, A21N</td><td>1h 25m</td></tr>
+          <tr><td class="flight-no">QFV410/411</td><td class="icao">SYD</td><td class="icao">BNE</td><td>B738, A21N</td><td>1h 30m</td></tr>
+          <tr><td class="flight-no">QFV430/431</td><td class="icao">SYD</td><td class="icao">PER</td><td>B738, A21N</td><td>5h 05m</td></tr>
+          <tr><td class="flight-no">QFV440/441</td><td class="icao">MEL</td><td class="icao">ADL</td><td>B738</td><td>1h 05m</td></tr>
+          <tr><td class="flight-no">QFV450/451</td><td class="icao">SYD</td><td class="icao">ADL</td><td>B738</td><td>1h 55m</td></tr>
+          <tr><td class="flight-no">QFV460/461</td><td class="icao">MEL</td><td class="icao">PER</td><td>B738, A21N</td><td>4h 25m</td></tr>
+          <tr><td class="flight-no">QFV470/471</td><td class="icao">BNE</td><td class="icao">CNS</td><td>B738</td><td>2h 00m</td></tr>
+          <tr><td class="flight-no">QFV480/481</td><td class="icao">SYD</td><td class="icao">CNS</td><td>B738</td><td>2h 55m</td></tr>
+          <tr><td class="flight-no">QFV490/491</td><td class="icao">MEL</td><td class="icao">HBA</td><td>B738</td><td>1h 10m</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="tasman" class="route-panel">
+    <div class="route-table-wrap">
+      <table class="route-table">
+        <thead><tr><th>Flight</th><th>From</th><th>To</th><th>Aircraft</th><th>Block Time</th></tr></thead>
+        <tbody>
+          <tr><td class="flight-no">QFV101/102</td><td class="icao">SYD</td><td class="icao">AKL</td><td>B738, A21N</td><td>3h 20m</td></tr>
+          <tr><td class="flight-no">QFV103/104</td><td class="icao">MEL</td><td class="icao">AKL</td><td>A332</td><td>3h 45m</td></tr>
+          <tr><td class="flight-no">QFV105/106</td><td class="icao">SYD</td><td class="icao">CHC</td><td>B738</td><td>3h 30m</td></tr>
+          <tr><td class="flight-no">QFV130/131</td><td class="icao">SYD</td><td class="icao">NAN</td><td>A332</td><td>3h 50m</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="intl-short" class="route-panel">
+    <div class="route-table-wrap">
+      <table class="route-table">
+        <thead><tr><th>Flight</th><th>From</th><th>To</th><th>Aircraft</th><th>Block Time</th></tr></thead>
+        <tbody>
+          <tr><td class="flight-no">QFV001/002</td><td class="icao">SYD</td><td class="icao">SIN</td><td>A333</td><td>8h 05m</td></tr>
+          <tr><td class="flight-no">QFV003/004</td><td class="icao">MEL</td><td class="icao">SIN</td><td>A333</td><td>7h 35m</td></tr>
+          <tr><td class="flight-no">QFV010/011</td><td class="icao">SYD</td><td class="icao">HKG</td><td>A333</td><td>9h 05m</td></tr>
+          <tr><td class="flight-no">QFV015/016</td><td class="icao">SYD</td><td class="icao">DPS</td><td>B738, A333</td><td>6h 00m</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="intl-long" class="route-panel">
+    <div class="route-table-wrap">
+      <table class="route-table">
+        <thead><tr><th>Flight</th><th>From</th><th>To</th><th>Aircraft</th><th>Block Time</th></tr></thead>
+        <tbody>
+          <tr><td class="flight-no">QFV007/008</td><td class="icao">SYD</td><td class="icao">LHR</td><td>A388 (via SIN)</td><td>22h 00m</td></tr>
+          <tr><td class="flight-no">QFV009/012</td><td class="icao">PER</td><td class="icao">LHR</td><td>B789 (non-stop)</td><td>17h 20m</td></tr>
+          <tr><td class="flight-no">QFV020/021</td><td class="icao">SYD</td><td class="icao">LAX</td><td>A388, B789</td><td>14h 50m</td></tr>
+          <tr><td class="flight-no">QFV022/023</td><td class="icao">MEL</td><td class="icao">LAX</td><td>B789</td><td>15h 30m</td></tr>
+          <tr><td class="flight-no">QFV025/026</td><td class="icao">SYD</td><td class="icao">DFW</td><td>B789</td><td>17h 00m</td></tr>
+          <tr><td class="flight-no">QFV030/031</td><td class="icao">SYD</td><td class="icao">NRT</td><td>B789</td><td>9h 40m</td></tr>
+          <tr><td class="flight-no">QFV035/036</td><td class="icao">SYD</td><td class="icao">HND</td><td>B789</td><td>9h 30m</td></tr>
+          <tr><td class="flight-no">QFV040/041</td><td class="icao">SYD</td><td class="icao">DXB</td><td>A388</td><td>14h 00m</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- RANKS -->
+<section id="ranks">
+  <div class="section-eyebrow">Career Progression</div>
+  <h2 class="section-title">Rank Structure</h2>
+  <p class="section-sub">Progress through 7 ranks as you accumulate hours via Flight Logger. Hours are only counted from flights flown on VATSIM and logged through the bot.</p>
+  <div class="rank-track">
+    <div class="rank-row"><div class="rank-dot">R1</div><div class="rank-info"><div class="rank-title">Cadet</div><div class="rank-hours">0 hours</div><div class="rank-access">B737-800, A321XLR — Domestic Australia only</div></div></div>
+    <div class="rank-row"><div class="rank-dot">R2</div><div class="rank-info"><div class="rank-title">Second Officer</div><div class="rank-hours">10 hours</div><div class="rank-access">B737-800, A321XLR — Domestic + Trans-Tasman</div></div></div>
+    <div class="rank-row"><div class="rank-dot">R3</div><div class="rank-info"><div class="rank-title">First Officer</div><div class="rank-hours">25 hours</div><div class="rank-access">+ A330-200/300 — Short & medium international unlocked</div></div></div>
+    <div class="rank-row"><div class="rank-dot">R4</div><div class="rank-info"><div class="rank-title">Senior First Officer</div><div class="rank-hours">50 hours</div><div class="rank-access">+ B787-9 — All routes unlocked</div></div></div>
+    <div class="rank-row"><div class="rank-dot">R5</div><div class="rank-info"><div class="rank-title">Captain</div><div class="rank-hours">100 hours</div><div class="rank-access">+ A380 endorsement eligible · Mentor eligible</div></div></div>
+    <div class="rank-row"><div class="rank-dot">R6</div><div class="rank-info"><div class="rank-title">Senior Captain</div><div class="rank-hours">250 hours</div><div class="rank-access">All routes + staff nomination eligible</div></div></div>
+    <div class="rank-row"><div class="rank-dot">R7</div><div class="rank-info"><div class="rank-title">Chief Pilot</div><div class="rank-hours">Staff appointment</div><div class="rank-access">VA management · SOP approval authority</div></div></div>
+  </div>
+</section>
+
+<!-- DOCUMENTS -->
+<section id="docs">
+  <div class="section-eyebrow">Official Documentation</div>
+  <h2 class="section-title">Policies & SOPs</h2>
+  <p class="section-sub">All documents are available on the QFV GitHub repository. Always read the relevant SOP before flying a new aircraft type.</p>
+  <div class="docs-grid">
+    <a class="doc-card" href="https://github.com/Qantas-Virtual-Airline/Terms-and-condition" target="_blank">
+      <div class="doc-type">Policy · POL-001</div>
+      <div class="doc-title">Pilot Handbook & Rank Structure</div>
+      <div class="doc-desc">Membership rules, rank system, type endorsements, activity requirements, and disciplinary policy.</div>
+    </a>
+    <a class="doc-card" href="https://github.com/Qantas-Virtual-Airline/Terms-and-condition" target="_blank">
+      <div class="doc-type">Policy · POL-002</div>
+      <div class="doc-title">Route Network Policy</div>
+      <div class="doc-desc">All approved QFV routes, aircraft assignments, and flight number allocations.</div>
+    </a>
+    <a class="doc-card" href="https://github.com/Qantas-Virtual-Airline/Terms-and-condition" target="_blank">
+      <div class="doc-type">Policy · POL-003</div>
+      <div class="doc-title">Joining & Onboarding Guide</div>
+      <div class="doc-desc">Step-by-step application process, onboarding checklist, and first flight requirements.</div>
+    </a>
+    <a class="doc-card" href="https://github.com/Qantas-Virtual-Airline/Terms-and-condition" target="_blank">
+      <div class="doc-type">SOP · SOP-001</div>
+      <div class="doc-title">Boeing 737-800 SOP</div>
+      <div class="doc-desc">Full procedures: startup, taxi, takeoff, climb, cruise, descent, approach, landing, and shutdown.</div>
+    </a>
+    <a class="doc-card" href="https://github.com/Qantas-Virtual-Airline/Terms-and-condition" target="_blank">
+      <div class="doc-type">SOP · SOP-002</div>
+      <div class="doc-title">Airbus A321XLR SOP</div>
+      <div class="doc-desc">Full Airbus procedures for QFV's newest and most versatile narrowbody aircraft.</div>
+    </a>
+    <a class="doc-card" href="https://github.com/Qantas-Virtual-Airline/Terms-and-condition" target="_blank">
+      <div class="doc-type">SOP · SOP-003</div>
+      <div class="doc-title">Airbus A330-200 & A330-300 SOP</div>
+      <div class="doc-desc">Combined procedures for both A330 variants including ETOPS and oceanic operations.</div>
+    </a>
+    <a class="doc-card" href="https://github.com/Qantas-Virtual-Airline/Terms-and-condition" target="_blank">
+      <div class="doc-type">SOP · SOP-004</div>
+      <div class="doc-title">Boeing 787-9 Dreamliner SOP</div>
+      <div class="doc-desc">Long-haul procedures for QFV's primary workhorse including oceanic and ultra-long sectors.</div>
+    </a>
+    <a class="doc-card" href="https://github.com/Qantas-Virtual-Airline/Terms-and-condition" target="_blank">
+      <div class="doc-type">SOP · SOP-005</div>
+      <div class="doc-title">Airbus A380-800 SOP</div>
+      <div class="doc-desc">Full procedures for QFV's flagship aircraft. Endorsement required. Captain rank minimum.</div>
+    </a>
+    <a class="doc-card" href="https://github.com/Qantas-Virtual-Airline/Terms-and-condition" target="_blank">
+      <div class="doc-type">Printable PDF</div>
+      <div class="doc-title">All SOPs — Printable Reference</div>
+      <div class="doc-desc">All 5 aircraft SOPs compiled into a single printable PDF with quick reference tables.</div>
+    </a>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="section-eyebrow">Ready to Fly?</div>
+  <h2 class="section-title">Join Qantas Virtual</h2>
+  <p class="section-sub" style="margin: 0 auto 40px; text-align: center; max-width: 500px;">We welcome pilots of all experience levels. All you need is a VATSIM account, a flight simulator, and a SimBrief account.</p>
+  <div class="join-steps">
+    <div class="join-step"><div class="join-step-num">01</div><div class="join-step-title">Join our Discord</div><div class="join-step-desc">Click the link below and accept the server rules to gain access.</div></div>
+    <div class="join-step"><div class="join-step-num">02</div><div class="join-step-title">Submit Application</div><div class="join-step-desc">Post your application in #pilot-applications with your VATSIM CID and simulator platform.</div></div>
+    <div class="join-step"><div class="join-step-num">03</div><div class="join-step-title">Get Your Pilot ID</div><div class="join-step-desc">Staff will review within 48 hours and assign your Pilot ID and Cadet rank.</div></div>
+    <div class="join-step"><div class="join-step-num">04</div><div class="join-step-title">Fly & Log</div><div class="join-step-desc">Plan on SimBrief, fly on VATSIM, log with Flight Logger. Start building your hours.</div></div>
+  </div>
+  <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+    <a href="#" class="btn-primary">Join Discord — Apply Now</a>
+    <a href="https://vatsim.net" target="_blank" class="btn-ghost">Get VATSIM Account</a>
+    <a href="https://www.simbrief.com" target="_blank" class="btn-ghost">Get SimBrief</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>Q</span>ANTAS VIRTUAL · QFV</div>
+  <div class="footer-links">
+    <a href="https://vatsim.net" target="_blank">VATSIM</a>
+    <a href="https://www.simbrief.com" target="_blank">SimBrief</a>
+    <a href="https://github.com/Qantas-Virtual-Airline/Terms-and-condition" target="_blank">GitHub</a>
+    <a href="#docs">Documents</a>
+    <a href="#join">Join</a>
+  </div>
+  <div class="footer-note">VATSIM Virtual Airline Affiliate (VAA) · Not affiliated with Qantas Airways Limited · For simulation use only</div>
+</footer>
+
+<script>
+function showRoutes(id) {
+  document.querySelectorAll('.route-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.route-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
