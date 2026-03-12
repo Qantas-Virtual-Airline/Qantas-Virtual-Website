@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Routes — Qantas Virtual QFV</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="navslot"></div>
+<main class="qpage">
+<section class="qhero" style="min-height:48vh">
+  <div class="qhero-bg"></div><div class="qhero-grid"></div><div class="qhero-line"></div>
+  <div class="qhero-content">
+    <div class="qeyebrow">Network</div>
+    <h1 class="qtitle"><span class="red">ROUTE</span><br><span class="ghost">NETWORK</span></h1>
+    <p class="qsub">All routes modelled on real Qantas Airways operations. Plan every flight with SimBrief and log it with Flight Logger.</p>
+  </div>
+</section>
+
+<section class="qsec qsec-panel">
+  <div class="shead">Route Network</div>
+  <h2 class="stitle">Approved Routes</h2>
+  <div class="sline"></div>
+  <div class="qalert qalert-g mb24"><span class="qalert-icon">📌</span><div class="qalert-body"><strong>Before every flight:</strong> Generate SimBrief OFP → File IFR on VATSIM → Fly → Log with Flight Logger within 48 hours.</div></div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+    <button class="rtab-btn active" onclick="showTab('dom')" style="font-family:var(--body);font-weight:700;font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;padding:9px 18px;background:var(--red);color:white;border:none;cursor:pointer;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%)">Domestic</button>
+    <button class="rtab-btn" onclick="showTab('tas')" style="font-family:var(--body);font-weight:700;font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;padding:9px 18px;background:var(--panel);color:var(--muted);border:1px solid var(--border2);cursor:pointer;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%)">Trans-Tasman</button>
+    <button class="rtab-btn" onclick="showTab('ints')" style="font-family:var(--body);font-weight:700;font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;padding:9px 18px;background:var(--panel);color:var(--muted);border:1px solid var(--border2);cursor:pointer;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%)">Short Intl</button>
+    <button class="rtab-btn" onclick="showTab('intl')" style="font-family:var(--body);font-weight:700;font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;padding:9px 18px;background:var(--panel);color:var(--muted);border:1px solid var(--border2);cursor:pointer;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%)">Long-Haul</button>
+  </div>
+
+  <div id="panel-dom" class="rtab-panel active"><div class="twrap"><table class="qtbl">
+    <thead><tr><th>Flight</th><th>From</th><th>To</th><th>Aircraft</th><th>Block Time</th><th>Min. Rank</th></tr></thead>
+    <tbody>
+      <tr><td class="m">QFV400/401</td><td>SYD</td><td>MEL</td><td>B738, A21N</td><td>1h 25m</td><td class="mt">R1</td></tr>
+      <tr><td class="m">QFV410/411</td><td>SYD</td><td>BNE</td><td>B738, A21N</td><td>1h 30m</td><td class="mt">R1</td></tr>
+      <tr><td class="m">QFV430/431</td><td>SYD</td><td>PER</td><td>B738, A21N</td><td>5h 05m</td><td class="mt">R1</td></tr>
+      <tr><td class="m">QFV440/441</td><td>MEL</td><td>ADL</td><td>B738</td><td>1h 05m</td><td class="mt">R1</td></tr>
+      <tr><td class="m">QFV450/451</td><td>SYD</td><td>ADL</td><td>B738</td><td>1h 55m</td><td class="mt">R1</td></tr>
+      <tr><td class="m">QFV460/461</td><td>MEL</td><td>PER</td><td>B738, A21N</td><td>4h 25m</td><td class="mt">R1</td></tr>
+      <tr><td class="m">QFV470/471</td><td>BNE</td><td>CNS</td><td>B738</td><td>2h 00m</td><td class="mt">R1</td></tr>
+      <tr><td class="m">QFV480/481</td><td>SYD</td><td>CNS</td><td>B738</td><td>2h 55m</td><td class="mt">R1</td></tr>
+      <tr><td class="m">QFV490/491</td><td>MEL</td><td>HBA</td><td>B738</td><td>1h 10m</td><td class="mt">R1</td></tr>
+    </tbody>
+  </table></div></div>
+
+  <div id="panel-tas" class="rtab-panel" style="display:none"><div class="twrap"><table class="qtbl">
+    <thead><tr><th>Flight</th><th>From</th><th>To</th><th>Aircraft</th><th>Block Time</th><th>Min. Rank</th></tr></thead>
+    <tbody>
+      <tr><td class="m">QFV101/102</td><td>SYD</td><td>AKL</td><td>B738, A21N</td><td>3h 20m</td><td class="mt">R1</td></tr>
+      <tr><td class="m">QFV103/104</td><td>MEL</td><td>AKL</td><td>A332</td><td>3h 45m</td><td class="mt">R3</td></tr>
+      <tr><td class="m">QFV105/106</td><td>SYD</td><td>CHC</td><td>B738</td><td>3h 30m</td><td class="mt">R1</td></tr>
+      <tr><td class="m">QFV130/131</td><td>SYD</td><td>NAN</td><td>A332</td><td>3h 50m</td><td class="mt">R3</td></tr>
+    </tbody>
+  </table></div></div>
+
+  <div id="panel-ints" class="rtab-panel" style="display:none"><div class="twrap"><table class="qtbl">
+    <thead><tr><th>Flight</th><th>From</th><th>To</th><th>Aircraft</th><th>Block Time</th><th>Min. Rank</th></tr></thead>
+    <tbody>
+      <tr><td class="m">QFV001/002</td><td>SYD</td><td>SIN</td><td>A333</td><td>8h 05m</td><td class="mt">R3</td></tr>
+      <tr><td class="m">QFV003/004</td><td>MEL</td><td>SIN</td><td>A333</td><td>7h 35m</td><td class="mt">R3</td></tr>
+      <tr><td class="m">QFV010/011</td><td>SYD</td><td>HKG</td><td>A333</td><td>9h 05m</td><td class="mt">R3</td></tr>
+      <tr><td class="m">QFV015/016</td><td>SYD</td><td>DPS</td><td>B738, A333</td><td>6h 00m</td><td class="mt">R1/R3</td></tr>
+    </tbody>
+  </table></div></div>
+
+  <div id="panel-intl" class="rtab-panel" style="display:none"><div class="twrap"><table class="qtbl">
+    <thead><tr><th>Flight</th><th>From</th><th>To</th><th>Aircraft</th><th>Block Time</th><th>Min. Rank</th></tr></thead>
+    <tbody>
+      <tr><td class="m">QFV007/008</td><td>SYD</td><td>LHR (via SIN)</td><td>A388</td><td>22h 00m</td><td class="mt">R5+</td></tr>
+      <tr><td class="m">QFV009/012</td><td>PER</td><td>LHR (non-stop)</td><td>B789</td><td>17h 20m</td><td class="mt">R4</td></tr>
+      <tr><td class="m">QFV020/021</td><td>SYD</td><td>LAX</td><td>A388, B789</td><td>14h 50m</td><td class="mt">R4/R5</td></tr>
+      <tr><td class="m">QFV022/023</td><td>MEL</td><td>LAX</td><td>B789</td><td>15h 30m</td><td class="mt">R4</td></tr>
+      <tr><td class="m">QFV025/026</td><td>SYD</td><td>DFW</td><td>B789</td><td>17h 00m</td><td class="mt">R4</td></tr>
+      <tr><td class="m">QFV030/031</td><td>SYD</td><td>NRT</td><td>B789</td><td>9h 40m</td><td class="mt">R4</td></tr>
+      <tr><td class="m">QFV035/036</td><td>SYD</td><td>HND</td><td>B789</td><td>9h 30m</td><td class="mt">R4</td></tr>
+      <tr><td class="m">QFV040/041</td><td>SYD</td><td>DXB</td><td>A388</td><td>14h 00m</td><td class="mt">R5+</td></tr>
+    </tbody>
+  </table></div></div>
+</section>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.rtab-panel').forEach(p=>p.style.display='none');
+  document.getElementById('panel-'+id).style.display='block';
+  document.querySelectorAll('.rtab-btn').forEach(b=>{b.style.background='var(--panel)';b.style.color='var(--muted)';b.style.border='1px solid var(--border2)'});
+  event.target.style.background='var(--red)';event.target.style.color='white';event.target.style.border='none';
+}
+</script>
+</main>
+<div id="footerslot"></div>
+<script src="nav.js"></script>
+<script>document.getElementById('navslot').innerHTML=buildNav('routes.html');document.getElementById('footerslot').innerHTML=buildFooter();</script>
+</body></html>

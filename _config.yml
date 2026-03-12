@@ -1,0 +1,9 @@
+title: Qantas Virtual
+description: Australia's premier virtual airline on the VATSIM network. ICAO QFV.
+url: "https://qantas-virtual-airline.github.io"
+baseurl: "/Qantas-Virtual-Website"
+plugins: []
+exclude:
+  - "*.md"
+  - "_placeholder.html"
+  - "_tmp.txt"
