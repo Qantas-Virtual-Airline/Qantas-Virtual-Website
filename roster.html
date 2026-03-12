@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Pilot Roster — Qantas Virtual QFV</title>
+<meta name="description" content="QFV — Independent virtual airline on VATSIM. ICAO QFV."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<nav id="qnav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-mark">Q</div>
+    <span class="nav-wm"><span>QANTAS</span> VIRTUAL</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="about.html" class="nav-link">About</a></li>
+    <li><a href="fleet.html" class="nav-link">Fleet</a></li>
+    <li><a href="routes.html" class="nav-link">Routes</a></li>
+    <li><a href="flights.html" class="nav-link">My Flights</a></li>
+    <li><a href="training.html" class="nav-link">Training</a></li>
+    <li><a href="military.html" class="nav-link">Military</a></li>
+    <li><a href="atc.html" class="nav-link">ATC</a></li>
+    <li><a href="ranks.html" class="nav-link">Ranks</a></li>
+    <li><a href="roster.html" class="nav-link active">Roster</a></li>
+    <li><a href="support.html" class="nav-link">Support</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-dot">VAA ACTIVE</div>
+    <span id="nav-admin-badge" class="nav-admin">★ ADMIN</span>
+    <button id="nav-login-btn" class="nav-btn nav-btn-out" onclick="QFV.ui.showModal('login-modal')">LOG IN</button>
+    <button id="nav-logout-btn" class="nav-btn nav-btn-out" onclick="QFV.session.logout()" style="display:none">LOG OUT</button>
+    <a href="join.html" class="nav-btn">JOIN QFV</a>
+  </div>
+</nav>
+
+
+<!-- LOGIN MODAL -->
+<div class="modal-ov" id="login-modal" onclick="if(event.target===this)QFV.ui.hideModal('login-modal')">
+  <div class="modal">
+    <button class="modal-x" onclick="QFV.ui.hideModal('login-modal')">✕</button>
+    <h2 class="cr">LOGIN</h2>
+    <p>Enter your VATSIM CID. Full VATSIM OAuth coming soon.</p>
+    <form class="form" onsubmit="qfvLogin(event)">
+      <div class="fld">
+        <label class="flbl">VATSIM CID</label>
+        <input class="finp" id="login-cid" type="text" placeholder="e.g. 1234567" required/>
+      </div>
+      <div class="fld">
+        <label class="flbl">Display Name</label>
+        <input class="finp" id="login-name" type="text" placeholder="e.g. John Smith" required/>
+      </div>
+      <div class="ferr" id="login-err"></div>
+      <button type="submit" class="btn btn-r btn-full">Access Member Area</button>
+    </form>
+    <p style="font-size:.72rem;color:var(--m);margin-top:12px">CID stored in browser session only. Not transmitted anywhere.</p>
+  </div>
+</div>
+
+<!-- LOG FLIGHT MODAL -->
+<div class="modal-ov" id="log-modal" onclick="if(event.target===this)QFV.ui.hideModal('log-modal')">
+  <div class="modal">
+    <button class="modal-x" onclick="QFV.ui.hideModal('log-modal')">✕</button>
+    <h2 class="cr">LOG FLIGHT</h2>
+    <p>Record your completed flight. SimBrief OFP must have been used.</p>
+    <form class="form" onsubmit="submitFlight(event)">
+      <div class="frow">
+        <div class="fld">
+          <label class="flbl">Flight Number</label>
+          <input class="finp" id="lf-fn" type="text" placeholder="QFV401" required/>
+        </div>
+        <div class="fld">
+          <label class="flbl">Aircraft</label>
+          <select class="fsel" id="lf-ac">
+            <option>B738</option><option>A21N</option>
+            <option>A332</option><option>A333</option>
+            <option>B789</option><option>A388</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fld">
+          <label class="flbl">Departure ICAO</label>
+          <input class="finp" id="lf-dep" type="text" placeholder="YSSY" maxlength="4" required style="text-transform:uppercase"/>
+        </div>
+        <div class="fld">
+          <label class="flbl">Arrival ICAO</label>
+          <input class="finp" id="lf-arr" type="text" placeholder="YMML" maxlength="4" required style="text-transform:uppercase"/>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fld">
+          <label class="flbl">Block Time</label>
+          <input class="finp" id="lf-block" type="text" placeholder="1h 25m" required/>
+        </div>
+        <div class="fld">
+          <label class="flbl">Date Flown</label>
+          <input class="finp" id="lf-date" type="date" required/>
+        </div>
+      </div>
+      <div class="fld">
+        <label class="flbl">SimBrief OFP Used?</label>
+        <select class="fsel" id="lf-sb" required>
+          <option value="yes">Yes — SimBrief OFP generated and used</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div class="fld">
+        <label class="flbl">Notes (optional)</label>
+        <input class="finp" id="lf-notes" type="text" placeholder="e.g. Full ATC coverage, smooth landing"/>
+      </div>
+      <div class="ferr" id="lf-err"></div>
+      <button type="submit" class="btn btn-r btn-full">Submit Flight Log</button>
+    </form>
+  </div>
+</div>
+
+
+<div id="cookie-banner">
+  <p>We use essential session cookies only. No tracking or advertising. See our <a href="privacy.html">Privacy Policy</a>.</p>
+  <div class="ck-btns">
+    <button id="ck-ok" onclick="QFV.cookies.accept()">Accept</button>
+    <button id="ck-no" onclick="QFV.cookies.decline()">Decline</button>
+  </div>
+</div>
+
+
+<div id="admin-panel">
+  <div class="ap-head">
+    <h4>ADMIN — QFV001</h4>
+    <button class="ap-x" onclick="document.getElementById('admin-panel').style.display='none'">✕</button>
+  </div>
+  <div class="ap-body">
+    <div style="font-family:var(--fm);font-size:.6rem;color:var(--ac);margin-bottom:10px">// CID 1870124 — President</div>
+    <div class="ap-row"><span class="ap-lbl">Applications Open</span><div class="ap-tog"><button class="ap-btn ap-on on">ON</button><button class="ap-btn ap-off">OFF</button></div></div>
+    <div class="ap-row"><span class="ap-lbl">Military Division</span><div class="ap-tog"><button class="ap-btn ap-on on">ON</button><button class="ap-btn ap-off">OFF</button></div></div>
+    <div class="ap-row"><span class="ap-lbl">Maintenance Mode</span><div class="ap-tog"><button class="ap-btn ap-on">ON</button><button class="ap-btn ap-off off">OFF</button></div></div>
+    <div class="ap-row"><span class="ap-lbl">Roster Public</span><div class="ap-tog"><button class="ap-btn ap-on on">ON</button><button class="ap-btn ap-off">OFF</button></div></div>
+    <div style="margin-top:12px;display:flex;gap:6px">
+      <a href="roster.html" class="btn btn-a btn-sm" style="clip-path:none;flex:1">Roster</a>
+      <button class="btn btn-o btn-sm" style="clip-path:none" onclick="QFV.session.logout()">Logout</button>
+    </div>
+  </div>
+</div>
+
+<main class="page">
+
+<section style="padding:72px 48px 48px;background:var(--k2);border-bottom:1px solid rgba(200,16,46,.15);position:relative;overflow:hidden">
+  <div class="hero-grid"></div>
+  <div class="s-eye">VAP Compliance</div>
+  <h1 style="font-family:var(--fd);font-size:clamp(2.5rem,7vw,5.5rem);line-height:.9;letter-spacing:1px;margin-bottom:10px">PILOT <span style="color:var(--r)">ROSTER</span></h1>
+  <p style="font-size:.92rem;color:var(--m);max-width:480px;line-height:1.75">Public roster — accessible without login, as required for VATSIM VAP compliance. Hours tracked via Flight Logger.</p>
+</section>
+<section class="sec sec-k">
+  <div class="alert aa" style="margin-bottom:24px"><span class="a-icon">ℹ</span><div class="a-body"><strong>VAP Transparency:</strong> This roster is publicly accessible per VATSIM VAP requirements (Sections 9.2.1 &amp; 10.5). No personal contact information is displayed.</div></div>
+  <div class="g4" style="margin-bottom:32px" id="roster-stats"></div>
+  <div class="s-eye">Active Pilots</div>
+  <h3 style="font-family:var(--fd);font-size:1.8rem;letter-spacing:1px;margin-bottom:16px">Pilot Register</h3>
+  <div class="tw"><table class="tbl" id="roster-tbl">
+    <thead><tr><th>Pilot ID</th><th>Name</th><th>VATSIM CID</th><th>Rating</th><th>Rank</th><th>Hours</th><th>Status</th></tr></thead>
+    <tbody id="roster-body"></tbody>
+  </table></div>
+  <div style="margin-top:40px">
+    <div class="s-eye">Recent Flights</div>
+    <h3 style="font-family:var(--fd);font-size:1.8rem;letter-spacing:1px;margin-bottom:16px">Flight Log (Public)</h3>
+    <div class="tw"><table class="tbl"><thead><tr><th>Date</th><th>Flight</th><th>Origin</th><th>Destination</th><th>Aircraft</th><th>Block Time</th></tr></thead>
+    <tbody id="pub-flights"></tbody></table></div>
+  </div>
+  <div style="margin-top:40px">
+    <div class="s-eye">Callsign Registry</div>
+    <h3 style="font-family:var(--fd);font-size:1.8rem;letter-spacing:1px;margin-bottom:14px">ICAO Prefixes</h3>
+    <div class="tw"><table class="tbl"><thead><tr><th>Prefix</th><th>Division</th><th>Example</th><th>Notes</th></tr></thead><tbody>
+      <tr><td class="tr">QFV</td><td>Civilian</td><td class="tbl tm" style="font-family:var(--fm)">QFV401</td><td class="tm">Primary callsign — all commercial routes</td></tr>
+      <tr><td class="tr">QFVM</td><td>Military</td><td class="tbl tm" style="font-family:var(--fm)">QFVM01</td><td class="tm">Military division operations and exercises</td></tr>
+      <tr><td class="tr">QFV9</td><td>Charter</td><td class="tbl tm" style="font-family:var(--fm)">QFV901</td><td class="tm">Charter, training and special flights</td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <svg width="160" height="48" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10,20 L55,10 L70,20 L70,80 L55,110 L10,80 Z" fill="#C8102E"/>
+        <path d="M22,38 L45,28 L58,38 L58,72 L45,88 L22,72 Z" fill="#07090B"/>
+        <circle cx="40" cy="58" r="4" fill="#C8102E"/><circle cx="40" cy="58" r="1.8" fill="white"/>
+        <text x="82" y="76" font-family="'Bebas Neue',Impact,sans-serif" font-size="62" letter-spacing="4" fill="white">QFV</text>
+        <rect x="82" y="80" width="220" height="1.5" fill="#C8102E" opacity=".5"/>
+        <text x="83" y="96" font-family="'Space Mono','Courier New',monospace" font-size="10" letter-spacing="5" fill="#C8102E">QANTAS VIRTUAL</text>
+      </svg>
+      <p class="footer-tagline">Independent virtual airline community on VATSIM. Three divisions — Civilian, Military, ATC.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Site</h4>
+      <a href="index.html">Home</a><a href="about.html">About</a>
+      <a href="fleet.html">Fleet</a><a href="routes.html">Routes</a>
+      <a href="roster.html">Pilot Roster</a><a href="join.html">Join</a>
+    </div>
+    <div class="footer-col">
+      <h4>Training</h4>
+      <a href="training.html">Pilot Training</a><a href="military.html">Military</a>
+      <a href="atc.html">ATC Training</a><a href="ranks.html">Ranks</a>
+      <a href="flights.html">My Flights</a>
+    </div>
+    <div class="footer-col">
+      <h4>Links</h4>
+      <a href="support.html">Support</a><a href="privacy.html">Privacy Policy</a>
+      <a href="https://www.simbrief.com" target="_blank">SimBrief ↗</a>
+      <a href="https://vatsim.net" target="_blank">VATSIM ↗</a>
+      <a href="https://github.com/Qantas-Virtual-Airline" target="_blank">GitHub ↗</a>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <p>© 2025 Qantas Virtual (QFV) — Independent virtual airline community. All rights reserved.</p>
+    <p class="footer-dis">NOT AFFILIATED WITH QANTAS AIRWAYS OR VATSIM · SIMULATION USE ONLY</p>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+
+<script>
+function submitFlight(e){
+  e.preventDefault();
+  const sb = document.getElementById('lf-sb').value;
+  const err = document.getElementById('lf-err');
+  if(sb !== 'yes'){
+    err.textContent = 'SimBrief OFP is mandatory for all flights. Flight not logged.';
+    err.style.display = 'block';
+    return;
+  }
+  const f = {
+    fn: document.getElementById('lf-fn').value.toUpperCase().trim(),
+    ac: document.getElementById('lf-ac').value,
+    dep: document.getElementById('lf-dep').value.toUpperCase().trim(),
+    arr: document.getElementById('lf-arr').value.toUpperCase().trim(),
+    block: document.getElementById('lf-block').value.trim(),
+    date: document.getElementById('lf-date').value,
+    notes: document.getElementById('lf-notes').value.trim(),
+    pilot: QFV.session.name || 'Unknown',
+  };
+  if(!f.fn || !f.dep || !f.arr || !f.block || !f.date){
+    err.textContent = 'Please fill in all required fields.';
+    err.style.display = 'block';
+    return;
+  }
+  QFV.flights.add(f);
+  QFV.ui.hideModal('log-modal');
+  QFV.ui.toast('✓ Flight logged: ' + f.fn + ' ' + f.dep + '→' + f.arr);
+  err.style.display = 'none';
+  e.target.reset();
+  if(typeof renderFlights === 'function') renderFlights();
+}
+</script>
+
+
+<script>
+const ROSTER_DATA = [
+  {id:'QFV001',name:'President',cid:'1870124',rating:'PPL (P1)',rank:'Chief Pilot',hours:45,status:'active'},
+  {id:'QFV002',name:'Vice President',cid:'—',rating:'Training (P0)',rank:'Cadet',hours:12,status:'active'},
+  {id:'QFV003',name:'Pilot 3',cid:'—',rating:'Training (P0)',rank:'Cadet',hours:5,status:'active'},
+  {id:'QFV004',name:'Pilot 4',cid:'—',rating:'Training (P0)',rank:'Cadet',hours:3,status:'active'},
+  {id:'QFV005',name:'Pilot 5',cid:'—',rating:'Training (P0)',rank:'Cadet',hours:1,status:'active'},
+];
+const PUB_FLIGHTS = [
+  {date:'2025-03-10',fn:'QFV401',org:'YSSY',dst:'YMML',ac:'B738',block:'1h 25m'},
+  {date:'2025-03-08',fn:'QFV410',org:'YSSY',dst:'YBBN',ac:'B738',block:'1h 30m'},
+  {date:'2025-03-05',fn:'QFV401',org:'YSSY',dst:'YMML',ac:'B738',block:'1h 26m'},
+  {date:'2025-03-01',fn:'QFV440',org:'YMML',dst:'YPAD',ac:'B738',block:'1h 05m'},
+  {date:'2025-02-28',fn:'QFV401',org:'YSSY',dst:'YMML',ac:'B738',block:'1h 24m'},
+];
+const badge=(s,c)=>`<span style="font-family:var(--fm);font-size:.58rem;padding:2px 8px;border:1px solid ${c};color:${c}">${s.toUpperCase()}</span>`;
+document.getElementById('roster-stats').innerHTML=`
+  <div class="card"><div class="cp tc"><div class="st-n">${ROSTER_DATA.length}</div><div class="st-l">Active Pilots</div></div></div>
+  <div class="card"><div class="cp tc"><div class="st-n">${PUB_FLIGHTS.length}</div><div class="st-l">Flights (90d)</div></div></div>
+  <div class="card"><div class="cp tc"><div class="st-n">${ROSTER_DATA.reduce((a,r)=>a+r.hours,0)}h</div><div class="st-l">Total Hours</div></div></div>
+  <div class="card"><div class="cp tc"><div class="st-n">QFV</div><div class="st-l">ICAO Callsign</div></div></div>
+`;
+document.getElementById('roster-body').innerHTML=ROSTER_DATA.map(r=>`
+  <tr><td class="tr">${r.id}</td><td style="font-weight:600">${r.name}</td>
+  <td style="font-family:var(--fm);font-size:.78rem;color:var(--m)">${r.cid}</td>
+  <td class="tg">${r.rating}</td><td>${r.rank}</td>
+  <td class="tr">${r.hours}h</td>
+  <td>${badge(r.status,r.status==='active'?'var(--go)':'var(--m2)')}</td></tr>`).join('');
+document.getElementById('pub-flights').innerHTML=PUB_FLIGHTS.map(f=>`
+  <tr><td style="font-family:var(--fm);font-size:.76rem;color:var(--m)">${f.date}</td>
+  <td class="tr">${f.fn}</td>
+  <td style="font-weight:700">${f.org}</td><td style="font-weight:700">${f.dst}</td>
+  <td class="tg">${f.ac}</td><td style="color:var(--m)">${f.block}</td></tr>`).join('');
+</script>
+
+</body>
+</html>
