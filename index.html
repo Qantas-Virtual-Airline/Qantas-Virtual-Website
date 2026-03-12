@@ -1,166 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Qantas Virtual — QFV | Australia's Premier VATSIM Virtual Airline</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Qantas Virtual — QFV | Independent VATSIM Virtual Airline</title>
+<meta name="description" content="QFV is an independent virtual airline community on the VATSIM network. Fly real routes with full SOPs, SimBrief planning, and professional flight logging across three divisions."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css"/>
-<script>document.addEventListener('DOMContentLoaded',()=>{document.getElementById('navslot').innerHTML=buildNav('index.html')})</script>
 </head>
 <body>
-<div id="navslot"></div>
-<main class="qpage">
+<div id="navslot" data-page="index.html"></div>
+<div id="modalslot"></div>
+<div id="adminslot"></div>
+<div id="cookieslot"></div>
 
-<!-- HERO -->
-<section class="qhero">
-  <div class="qhero-bg"></div><div class="qhero-grid"></div><div class="qhero-noise"></div><div class="qhero-line"></div>
-  <!-- Animated background text -->
-  <div style="position:absolute;right:-20px;top:50%;transform:translateY(-50%);font-family:var(--display);font-size:22vw;color:rgba(200,16,46,0.04);line-height:1;pointer-events:none;white-space:nowrap;letter-spacing:-8px">QFV</div>
-  <div class="qhero-content">
-    <div class="qeyebrow" data-aos data-delay="0">Virtual Airline · VATSIM VAA · Est. 2025 · ICAO QFV</div>
-    <h1 class="qtitle" data-aos data-delay="100">
-      <span class="red">QANTAS</span><br>
-      <span class="ghost">VIRTUAL</span>
-    </h1>
-    <p class="qsub" data-aos data-delay="200">Australia's premier virtual airline on the VATSIM network. We fly real Qantas routes, train real pilots, and maintain the highest standards of simulation professionalism.</p>
-    <div class="qtags" data-aos data-delay="250">
-      <span class="qtag r">VATSIM VAA</span>
-      <span class="qtag r">ICAO: QFV</span>
-      <span class="qtag a">5 Aircraft Types</span>
-      <span class="qtag a">30+ Routes</span>
-      <span class="qtag g">SimBrief Mandatory</span>
-      <span class="qtag o">Military Division</span>
+<main class="page">
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <!-- Left -->
+  <div class="hero-l">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-scan"></div>
+
+    <div class="h-eye" data-aos data-delay="0">
+      <span>// 2025</span> Independent Virtual Airline · VATSIM Community
     </div>
-    <div class="qbtns" data-aos data-delay="300">
-      <a href="join.html" class="qbtn qbtn-primary">Join the Airline</a>
-      <a href="training.html" class="qbtn qbtn-accent">View Training</a>
-      <a href="about.html" class="qbtn qbtn-ghost">Learn More</a>
+
+    <h1 class="h-title" data-aos data-delay="80">
+      <span class="ht1">QANTAS</span>
+      <span class="ht2">VIRTUAL</span>
+      <span class="ht3">QFV</span>
+    </h1>
+
+    <p class="h-sub" data-aos data-delay="160">
+      An independent virtual airline built around realism, community, and progression. Three divisions — Civilian, Military, and ATC — flying real routes with real procedures on the VATSIM network.
+    </p>
+
+    <div class="h-pills" data-aos data-delay="200">
+      <span class="pill p-r">VATSIM VAA</span>
+      <span class="pill p-r">ICAO QFV</span>
+      <span class="pill p-a">5 Aircraft Types</span>
+      <span class="pill p-a">30+ Routes</span>
+      <span class="pill p-g">Military Division</span>
+      <span class="pill p-d">SimBrief Mandatory</span>
+    </div>
+
+    <div class="h-btns" data-aos data-delay="240">
+      <a href="join.html" class="btn btn-r">Join the Airline</a>
+      <a href="training.html" class="btn btn-a">Training Programme</a>
+      <a href="about.html" class="btn btn-o">Learn More</a>
+    </div>
+  </div>
+
+  <!-- Right -->
+  <div class="hero-r">
+    <div class="hero-ghost">QFV</div>
+    <div class="hero-grid"></div>
+    <div class="hero-r-inner">
+      <div style="font-family:var(--fm);font-size:.58rem;letter-spacing:3px;color:var(--m);margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:14px">// NETWORK STATUS</div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div>
+            <div class="hero-stat-n">5</div>
+            <div class="hero-stat-l">Active Pilots</div>
+          </div>
+          <div style="font-family:var(--fm);font-size:.6rem;color:var(--go)">● ONLINE</div>
+        </div>
+        <div class="hero-stat">
+          <div>
+            <div class="hero-stat-n">5</div>
+            <div class="hero-stat-l">Aircraft Types</div>
+          </div>
+          <div style="font-family:var(--fm);font-size:.6rem;color:var(--m)">B738 – A388</div>
+        </div>
+        <div class="hero-stat">
+          <div>
+            <div class="hero-stat-n">30+</div>
+            <div class="hero-stat-l">Approved Routes</div>
+          </div>
+          <div style="font-family:var(--fm);font-size:.6rem;color:var(--m)">DOM + INTL</div>
+        </div>
+        <div class="hero-stat">
+          <div>
+            <div class="hero-stat-n">3</div>
+            <div class="hero-stat-l">Divisions</div>
+          </div>
+          <div style="font-family:var(--fm);font-size:.6rem;color:var(--m)">CIV · MIL · ATC</div>
+        </div>
+        <div class="hero-stat">
+          <div>
+            <div class="hero-stat-n">VAA</div>
+            <div class="hero-stat-l">VATSIM Status</div>
+          </div>
+          <div style="font-family:var(--fm);font-size:.6rem;color:var(--au)">→ VAP TARGET</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- STATS BAR -->
+<!-- ═══ STATS BAR ═══ -->
 <div class="statsbar">
-  <div class="stat"><div class="stat-n">5</div><div class="stat-l">Pilots</div></div>
-  <div class="stat"><div class="stat-n">5</div><div class="stat-l">Aircraft</div></div>
-  <div class="stat"><div class="stat-n">30+</div><div class="stat-l">Routes</div></div>
-  <div class="stat"><div class="stat-n">7</div><div class="stat-l">Rank Tiers</div></div>
-  <div class="stat"><div class="stat-n">3</div><div class="stat-l">Divisions</div></div>
+  <div class="sstat"><div class="sstat-n">5</div><div class="sstat-l">Pilots</div></div>
+  <div class="sstat"><div class="sstat-n">5</div><div class="sstat-l">Aircraft</div></div>
+  <div class="sstat"><div class="sstat-n">30+</div><div class="sstat-l">Routes</div></div>
+  <div class="sstat"><div class="sstat-n">3</div><div class="sstat-l">Divisions</div></div>
+  <div class="sstat"><div class="sstat-n">7</div><div class="sstat-l">Rank Tiers</div></div>
 </div>
 
-<!-- MANDATORY TOOLS -->
-<section class="qsec qsec-panel">
-  <div class="shead">Required on Every Flight</div>
-  <h2 class="stitle">Mandatory Tools</h2>
-  <div class="sline"></div>
+<!-- ═══ MANDATORY TOOLS ═══ -->
+<section class="sec sec-k2">
+  <div class="s-eye">Required on every flight</div>
+  <h2 class="s-title">Mandatory Tools</h2>
+  <div class="s-rule"></div>
   <div class="g2" data-aos>
-    <div class="qcard">
-      <div class="qp">
-        <div style="font-size:2rem;margin-bottom:12px">🗺️</div>
-        <div style="font-family:var(--display);font-size:1.6rem;letter-spacing:1px;margin-bottom:4px">SIMBRIEF</div>
-        <div class="mono" style="font-size:.65rem;color:var(--red);margin-bottom:12px">simbrief.com · FLIGHT PLANNING</div>
-        <p style="font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:16px">Generate a full Operational Flight Plan before every departure. Provides routing, fuel, weather, NOTAMs and performance data. Load directly into your FMS.</p>
-        <div class="qalert qalert-r"><span class="qalert-icon">⚠</span><div class="qalert-body"><strong>Mandatory.</strong> Flights without a SimBrief OFP will NOT count toward hours or rank.</div></div>
-        <a href="https://www.simbrief.com" target="_blank" class="qbtn qbtn-primary" style="margin-top:12px">Open SimBrief</a>
+    <div class="card">
+      <div class="cp">
+        <div style="font-size:2.2rem;margin-bottom:12px">🗺️</div>
+        <div style="font-family:var(--fd);font-size:1.7rem;letter-spacing:1px;margin-bottom:4px">SIMBRIEF</div>
+        <div class="mono cr" style="font-size:.6rem;margin-bottom:14px">simbrief.com — FLIGHT PLANNING</div>
+        <p style="font-size:.9rem;color:var(--m);line-height:1.75;margin-bottom:16px">Generate a full Operational Flight Plan before every departure. SimBrief provides routing, fuel calculations, NOTAM awareness, weather, and weight & balance. Load directly into your FMS via SimBrief integration.</p>
+        <div class="alert a-r mb16"><span class="a-icon">⚠</span><div class="a-body"><strong>Mandatory.</strong> Flights without a SimBrief OFP will NOT count toward hours or rank.</div></div>
+        <a href="https://www.simbrief.com" target="_blank" rel="noopener" class="btn btn-r btn-sm">Open SimBrief ↗</a>
       </div>
     </div>
-    <div class="qcard qcard-accent">
-      <div class="qp">
-        <div style="font-size:2rem;margin-bottom:12px">📋</div>
-        <div style="font-family:var(--display);font-size:1.6rem;letter-spacing:1px;margin-bottom:4px">FLIGHT LOGGER</div>
-        <div class="mono" style="font-size:.65rem;color:var(--accent);margin-bottom:12px">QFV Discord Bot · FLIGHT LOGGING</div>
-        <p style="font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:16px">Log every completed flight immediately after landing using the Flight Logger bot in the QFV Discord. Required fields: Flight Number · Aircraft · Departure · Arrival · Block Time.</p>
-        <div class="qalert qalert-a"><span class="qalert-icon">⚠</span><div class="qalert-body"><strong>Mandatory.</strong> Flights not logged via Flight Logger will NOT count. No manual submissions.</div></div>
-        <a href="join.html" class="qbtn qbtn-accent" style="margin-top:12px">Join Discord</a>
+    <div class="card card-a">
+      <div class="cp">
+        <div style="font-size:2.2rem;margin-bottom:12px">📋</div>
+        <div style="font-family:var(--fd);font-size:1.7rem;letter-spacing:1px;margin-bottom:4px">FLIGHT LOGGER</div>
+        <div class="mono ca" style="font-size:.6rem;margin-bottom:14px">QFV Discord Bot — FLIGHT LOGGING</div>
+        <p style="font-size:.9rem;color:var(--m);line-height:1.75;margin-bottom:16px">Log every completed flight immediately after landing using the Flight Logger bot in the QFV Discord. Required fields: Flight Number · Aircraft · Departure ICAO · Arrival ICAO · Block Time. Submit within 48 hours.</p>
+        <div class="alert a-a mb16"><span class="a-icon">⚠</span><div class="a-body"><strong>Mandatory.</strong> Flights not logged via Flight Logger will NOT count. No manual submissions.</div></div>
+        <a href="join.html" class="btn btn-a btn-sm">Join Discord →</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- DIVISIONS -->
-<section class="qsec qsec-dark">
-  <div class="shead">Our Divisions</div>
-  <h2 class="stitle">Three Wings, One Airline</h2>
-  <div class="sline"></div>
+<!-- ═══ THREE DIVISIONS ═══ -->
+<section class="sec sec-k">
+  <div class="s-eye">Our Wings</div>
+  <h2 class="s-title">Three Divisions</h2>
+  <div class="s-rule"></div>
   <div class="g3" data-aos>
-    <div class="qcard">
-      <div class="qp">
-        <div style="font-family:var(--display);font-size:2.5rem;color:var(--red);margin-bottom:8px">✈</div>
-        <div style="font-family:var(--display);font-size:1.4rem;letter-spacing:1px;margin-bottom:8px">CIVILIAN DIVISION</div>
-        <p style="font-size:.88rem;color:var(--muted);line-height:1.65;margin-bottom:16px">Fly real Qantas commercial routes across Australia and the world. From domestic hops in a 737-800 to ultra-long-haul A380 flights. SimBrief planned, VATSIM flown.</p>
-        <a href="training.html" class="qbtn qbtn-ghost" style="font-size:.75rem;padding:8px 16px">Pilot Training →</a>
+    <div class="card">
+      <div class="cp">
+        <div style="font-family:var(--fd);font-size:3rem;color:var(--r);line-height:1;margin-bottom:12px">✈</div>
+        <div style="font-family:var(--fd);font-size:1.4rem;letter-spacing:1px;margin-bottom:8px">CIVILIAN</div>
+        <p style="font-size:.88rem;color:var(--m);line-height:1.7;margin-bottom:16px">Fly commercial routes across Australia and the world. From a domestic 737-800 hop to an A380 ultra-long-haul. All flights SimBrief-planned, VATSIM-flown.</p>
+        <a href="training.html" class="btn btn-o btn-sm">Pilot Training →</a>
       </div>
     </div>
-    <div class="qcard qcard-gold">
-      <div class="qp">
-        <div style="font-family:var(--display);font-size:2.5rem;color:var(--gold);margin-bottom:8px">⚔</div>
-        <div style="font-family:var(--display);font-size:1.4rem;letter-spacing:1px;margin-bottom:8px">MILITARY DIVISION</div>
-        <p style="font-size:.88rem;color:var(--muted);line-height:1.65;margin-bottom:16px">Special operations, military transport, and tactical missions. Earn military ratings M1–M4 through dedicated training and exercise events. Restricted access.</p>
-        <a href="military.html" class="qbtn qbtn-gold" style="font-size:.75rem;padding:8px 16px">Military Wing →</a>
+    <div class="card card-gold">
+      <div class="cp">
+        <div style="font-family:var(--fd);font-size:3rem;color:var(--au);line-height:1;margin-bottom:12px">⚔</div>
+        <div style="font-family:var(--fd);font-size:1.4rem;letter-spacing:1px;margin-bottom:8px">MILITARY</div>
+        <p style="font-size:.88rem;color:var(--m);line-height:1.7;margin-bottom:16px">Special operations, tactical transport, maritime patrol and exercise events. Earn military ratings M1–M4. Restricted access — application required.</p>
+        <a href="military.html" class="btn btn-gold btn-sm">Military Wing →</a>
       </div>
     </div>
-    <div class="qcard qcard-accent">
-      <div class="qp">
-        <div style="font-family:var(--display);font-size:2.5rem;color:var(--accent);margin-bottom:8px">📡</div>
-        <div style="font-family:var(--display);font-size:1.4rem;letter-spacing:1px;margin-bottom:8px">ATC TRAINING</div>
-        <p style="font-size:.88rem;color:var(--muted);line-height:1.65;margin-bottom:16px">Study towards your VATSIM ATC ratings from S1 through C3. Full curriculum from Ground/Delivery through Enroute. Note: QFV does not issue ATC ratings — this is preparation for official VATPAC training.</p>
-        <a href="atc.html" class="qbtn qbtn-accent" style="font-size:.75rem;padding:8px 16px">ATC Training →</a>
+    <div class="card card-a">
+      <div class="cp">
+        <div style="font-family:var(--fd);font-size:3rem;color:var(--ac);line-height:1;margin-bottom:12px">📡</div>
+        <div style="font-family:var(--fd);font-size:1.4rem;letter-spacing:1px;margin-bottom:8px">ATC TRAINING</div>
+        <p style="font-size:.88rem;color:var(--m);line-height:1.7;margin-bottom:16px">Study for VATSIM ATC ratings S1–C3. Full curriculum. Note: QFV does not issue ATC ratings — we prepare you for VATPAC examinations.</p>
+        <a href="atc.html" class="btn btn-a btn-sm">ATC Training →</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FLEET SNAPSHOT -->
-<section class="qsec qsec-mid">
-  <div class="shead">Our Fleet</div>
-  <h2 class="stitle">Five Aircraft, One Network</h2>
-  <div class="sline"></div>
-  <div class="gauto" data-aos>
-    <div class="qcard"><div class="qp">
-      <div class="mono red" style="font-size:1.5rem;margin-bottom:6px">B738</div>
-      <div style="font-family:var(--display);font-size:1.1rem;margin-bottom:4px">Boeing 737-800</div>
-      <div style="font-size:.82rem;color:var(--muted)">Domestic · M0.785 · R1 Cadet</div>
+<!-- ═══ FLEET SNAPSHOT ═══ -->
+<section class="sec sec-p">
+  <div class="s-eye">Fleet</div>
+  <h2 class="s-title">Five Aircraft</h2>
+  <div class="s-rule"></div>
+  <div class="ga" data-aos>
+    <div class="card"><div class="cp">
+      <div class="mono cr" style="font-size:1.6rem;margin-bottom:6px">B738</div>
+      <div style="font-family:var(--fd);font-size:1.1rem;margin-bottom:4px">Boeing 737-800</div>
+      <div style="font-size:.82rem;color:var(--m)">Domestic · M0.785 · Rank R1</div>
     </div></div>
-    <div class="qcard"><div class="qp">
-      <div class="mono red" style="font-size:1.5rem;margin-bottom:6px">A21N</div>
-      <div style="font-family:var(--display);font-size:1.1rem;margin-bottom:4px">Airbus A321XLR</div>
-      <div style="font-size:.82rem;color:var(--muted)">Domestic + SE Asia · M0.79 · R2</div>
+    <div class="card"><div class="cp">
+      <div class="mono cr" style="font-size:1.6rem;margin-bottom:6px">A21N</div>
+      <div style="font-family:var(--fd);font-size:1.1rem;margin-bottom:4px">Airbus A321XLR</div>
+      <div style="font-size:.82rem;color:var(--m)">Domestic+SE Asia · M0.79 · Rank R2</div>
     </div></div>
-    <div class="qcard"><div class="qp">
-      <div class="mono red" style="font-size:1.5rem;margin-bottom:6px">A332/33</div>
-      <div style="font-family:var(--display);font-size:1.1rem;margin-bottom:4px">Airbus A330</div>
-      <div style="font-size:.82rem;color:var(--muted)">Medium International · M0.82 · R3</div>
+    <div class="card"><div class="cp">
+      <div class="mono cr" style="font-size:1.6rem;margin-bottom:6px">A332/33</div>
+      <div style="font-family:var(--fd);font-size:1.1rem;margin-bottom:4px">Airbus A330</div>
+      <div style="font-size:.82rem;color:var(--m)">International · M0.82 · Rank R3</div>
     </div></div>
-    <div class="qcard"><div class="qp">
-      <div class="mono red" style="font-size:1.5rem;margin-bottom:6px">B789</div>
-      <div style="font-family:var(--display);font-size:1.1rem;margin-bottom:4px">Boeing 787-9</div>
-      <div style="font-size:.82rem;color:var(--muted)">Long-Haul · M0.85 · R4</div>
+    <div class="card"><div class="cp">
+      <div class="mono cr" style="font-size:1.6rem;margin-bottom:6px">B789</div>
+      <div style="font-family:var(--fd);font-size:1.1rem;margin-bottom:4px">Boeing 787-9</div>
+      <div style="font-size:.82rem;color:var(--m)">Long-Haul · M0.85 · Rank R4</div>
     </div></div>
-    <div class="qcard"><div class="qp">
-      <div class="mono red" style="font-size:1.5rem;margin-bottom:6px">A388</div>
-      <div style="font-family:var(--display);font-size:1.1rem;margin-bottom:4px">Airbus A380-800</div>
-      <div style="font-size:.82rem;color:var(--muted)">Flagship · M0.85 · R5+Endorse</div>
+    <div class="card"><div class="cp">
+      <div class="mono cr" style="font-size:1.6rem;margin-bottom:6px">A388</div>
+      <div style="font-family:var(--fd);font-size:1.1rem;margin-bottom:4px">Airbus A380-800</div>
+      <div style="font-size:.82rem;color:var(--m)">Flagship · M0.85 · R5+Endorse</div>
     </div></div>
   </div>
-  <div style="margin-top:24px"><a href="fleet.html" class="qbtn qbtn-ghost">View Full Fleet →</a></div>
+  <div class="mt24"><a href="fleet.html" class="btn btn-o">View Full Fleet →</a></div>
 </section>
 
-<!-- CALL TO ACTION -->
-<section class="qsec qsec-red" style="text-align:center">
-  <div class="qhero-grid"></div>
-  <div style="position:relative;max-width:600px;margin:0 auto">
-    <div class="shead" style="justify-content:center">Ready to Fly?</div>
-    <h2 class="stitle" style="font-size:clamp(2.5rem,7vw,5rem)">JOIN QANTAS VIRTUAL</h2>
-    <p style="font-size:1rem;color:var(--muted);line-height:1.7;margin:16px auto 32px;max-width:480px">All experience levels welcome. Get your VATSIM account, set up SimBrief, join our Discord and start flying today.</p>
-    <div class="qbtns" style="justify-content:center">
-      <a href="join.html" class="qbtn qbtn-primary">Apply Now</a>
-      <a href="https://vatsim.net" target="_blank" class="qbtn qbtn-ghost">Get VATSIM</a>
+<!-- ═══ JOIN CTA ═══ -->
+<section class="sec sec-red tc">
+  <div class="hero-grid" style="position:absolute;inset:0"></div>
+  <div style="position:relative;max-width:580px;margin:0 auto">
+    <div class="s-eye" style="justify-content:center">Ready?</div>
+    <h2 class="s-title" style="font-size:clamp(3rem,8vw,6rem)">JOIN QFV</h2>
+    <p style="font-size:1rem;color:var(--m);line-height:1.8;margin:14px auto 32px;max-width:460px">All experience levels welcome. You need a VATSIM account, a flight simulator, and a SimBrief account. Applications reviewed within 48 hours.</p>
+    <div class="h-btns" style="justify-content:center">
+      <a href="join.html" class="btn btn-r">Apply Now</a>
+      <a href="https://vatsim.net/register" target="_blank" rel="noopener" class="btn btn-o">Get VATSIM ↗</a>
     </div>
   </div>
 </section>
 
 </main>
-<div id="footerslot"></div>
+
+<div id="footslot"></div>
 <script src="nav.js"></script>
-<script>document.getElementById('footerslot').innerHTML=buildFooter()</script>
 </body>
 </html>
