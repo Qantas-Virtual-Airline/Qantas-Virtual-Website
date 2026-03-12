@@ -1,8 +1,0 @@
-title: Qantas Virtual
-description: Independent virtual airline community on VATSIM. ICAO QFV.
-url: "https://qantas-virtual-airline.github.io"
-baseurl: "/Qantas-Virtual-Website"
-plugins: []
-exclude:
-  - README.md
-  - "*.md"
