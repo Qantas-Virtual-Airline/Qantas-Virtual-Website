@@ -6,17 +6,6 @@
 
 ---
 
-## 📁 Repository Structure
-
-```
-Qantas-Virtual-Website/
-├── index.html          ← Main website (single page)
-├── _config.yml         ← GitHub Pages configuration
-└── README.md           ← This file
-```
-
----
-
 ## 🚀 Deployment
 
 This site is deployed automatically via **GitHub Pages**.
