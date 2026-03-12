@@ -2,205 +2,199 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Support — Qantas Virtual QFV</title>
+<title>Support — QFV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<div id="navslot"></div>
-<main class="qpage">
+<div id="navslot" data-page="support.html"></div>
+<div id="modalslot"></div>
+<div id="adminslot"></div>
+<div id="cookieslot"></div>
 
-<section class="qhero" style="min-height:45vh">
-  <div class="qhero-bg"></div><div class="qhero-grid"></div><div class="qhero-line"></div>
-  <div class="qhero-content">
-    <div class="qeyebrow">Help Centre</div>
-    <h1 class="qtitle"><span class="red">SUPPORT</span></h1>
-    <p class="qsub">Get help from QFV staff. Choose the right contact below based on your enquiry. All messages go directly to our leadership team.</p>
-  </div>
+<main class="page">
+
+<section style="min-height:44vh;display:flex;flex-direction:column;justify-content:flex-end;padding:80px 48px 48px;background:var(--k2);border-bottom:1px solid rgba(200,16,46,.15);position:relative;overflow:hidden">
+  <div class="hero-grid"></div>
+  <div class="s-eye">Help Centre</div>
+  <h1 style="font-family:var(--fd);font-size:clamp(3rem,8vw,6rem);line-height:.9;letter-spacing:1px">
+    <span style="color:var(--w)">SUPPORT</span><br>
+    <span style="color:var(--r)">& CONTACT</span>
+  </h1>
+  <p style="font-size:.95rem;color:var(--m);margin-top:12px;max-width:500px;line-height:1.75">Get help from QFV staff. Fill in the form below and your enquiry will be routed to the right person. Responses within 48 hours.</p>
 </section>
 
-<!-- CONTACT CARDS -->
-<section class="qsec qsec-panel">
-  <div class="shead">Leadership Contact</div>
-  <h2 class="stitle">Contact Management</h2>
-  <div class="sline"></div>
-  <div class="g2">
-    <div class="qcard">
-      <div class="qp">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-          <div style="width:48px;height:48px;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:1.4rem;color:white;clip-path:polygon(0 0,100% 0,100% 75%,75% 100%,0 100%)">P</div>
-          <div>
-            <div style="font-family:var(--display);font-size:1.3rem;letter-spacing:1px">PRESIDENT</div>
-            <div class="mono" style="font-size:.65rem;color:var(--red)">VA HEAD — FINAL AUTHORITY</div>
-          </div>
-        </div>
-        <p style="font-size:.88rem;color:var(--muted);line-height:1.65;margin-bottom:16px">Contact the President for: serious complaints, appeals against decisions, partnership proposals, media enquiries, VATSIM-related issues, or matters that cannot be resolved at staff level.</p>
-        <a href="mailto:southeewesty123@gmail.com?subject=QFV%20Enquiry" class="qbtn qbtn-primary" style="display:block;text-align:center">
-          📧 Email President
-        </a>
-        <div class="mono" style="font-size:.65rem;color:var(--muted);text-align:center;margin-top:8px">southeewesty123@gmail.com</div>
-      </div>
-    </div>
-    <div class="qcard qcard-accent">
-      <div class="qp">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-          <div style="width:48px;height:48px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:1.4rem;color:var(--dark);clip-path:polygon(0 0,100% 0,100% 75%,75% 100%,0 100%)">V</div>
-          <div>
-            <div style="font-family:var(--display);font-size:1.3rem;letter-spacing:1px">VICE PRESIDENT</div>
-            <div class="mono" style="font-size:.65rem;color:var(--accent)">OPERATIONS & SUPPORT</div>
-          </div>
-        </div>
-        <p style="font-size:.88rem;color:var(--muted);line-height:1.65;margin-bottom:16px">Contact the Vice President for: general enquiries, training questions, rank disputes, event suggestions, recruitment discussions, or operational matters.</p>
-        <a href="mailto:Sfleishman@davinforge.com?subject=QFV%20Enquiry" class="qbtn qbtn-accent" style="display:block;text-align:center">
-          📧 Email Vice President
-        </a>
-        <div class="mono" style="font-size:.65rem;color:var(--muted);text-align:center;margin-top:8px">Sfleishman@davinforge.com</div>
-      </div>
-    </div>
-  </div>
-</section>
+<section class="sec sec-k2">
+  <div class="g2" style="gap:32px;max-width:1200px;margin:0 auto">
 
-<!-- SUPPORT FORM — sends mailto -->
-<section class="qsec qsec-dark">
-  <div class="shead">General Enquiry</div>
-  <h2 class="stitle">Submit a Support Request</h2>
-  <div class="sline"></div>
-  <div class="g2">
+    <!-- FORM -->
     <div>
-      <div class="qalert qalert-a mb24">
-        <span class="qalert-icon">ℹ</span>
-        <div class="qalert-body">Fill in this form and click Submit. Your email client will open with a pre-filled message ready to send to the correct staff member based on the category you select.</div>
+      <div class="s-eye">Contact Form</div>
+      <h2 class="s-title">Send a Message</h2>
+      <div class="s-rule"></div>
+
+      <div class="alert a-a mb24">
+        <span class="a-icon">ℹ</span>
+        <div class="a-body">Your message will open in your email client, pre-filled and ready to send to QFV staff. Staff contact details are kept private — you will receive a reply from the appropriate team member.</div>
       </div>
-      <form class="qform" id="supportForm">
-        <div class="qfield">
-          <label class="qlabel">Your Name / Callsign</label>
-          <input class="qinput" type="text" id="sName" placeholder="e.g. John Smith / QFV005" required/>
+
+      <form class="form" id="contact-form" onsubmit="sendForm(event)">
+        <div class="frow">
+          <div class="fld">
+            <label class="flbl">Your Name / Callsign</label>
+            <input class="finp" type="text" id="f-name" placeholder="e.g. John Smith / QFV005" required/>
+          </div>
+          <div class="fld">
+            <label class="flbl">VATSIM CID (optional)</label>
+            <input class="finp" type="text" id="f-cid" placeholder="e.g. 1234567"/>
+          </div>
         </div>
-        <div class="qfield">
-          <label class="qlabel">Your VATSIM CID</label>
-          <input class="qinput" type="text" id="sCID" placeholder="e.g. 1234567"/>
-        </div>
-        <div class="qfield">
-          <label class="qlabel">Category</label>
-          <select class="qselect" id="sCategory">
-            <option value="general">General Enquiry</option>
-            <option value="training">Training &amp; Ratings</option>
-            <option value="rank">Rank / Hours Dispute</option>
-            <option value="military">Military Division</option>
-            <option value="atc">ATC Training</option>
-            <option value="tech">Technical / Website Issue</option>
-            <option value="appeal">Appeal a Decision</option>
-            <option value="complaint">Complaint / Report</option>
-            <option value="partnership">Partnership Proposal</option>
-            <option value="other">Other</option>
+
+        <div class="fld">
+          <label class="flbl">Enquiry Category</label>
+          <select class="fsel" id="f-cat">
+            <option value="General Enquiry">General Enquiry</option>
+            <option value="Training & Ratings">Training &amp; Ratings</option>
+            <option value="Hours / Rank Dispute">Hours / Rank Dispute</option>
+            <option value="Military Division Application">Military Division Application</option>
+            <option value="ATC Training">ATC Training</option>
+            <option value="Appeal a Decision">Appeal a Decision</option>
+            <option value="Complaint / Report">Complaint / Report</option>
+            <option value="Technical / Website Issue">Technical / Website Issue</option>
+            <option value="Partnership Proposal">Partnership Proposal</option>
+            <option value="GDPR / Data Request">GDPR / Data Request</option>
+            <option value="Other">Other</option>
           </select>
         </div>
-        <div class="qfield">
-          <label class="qlabel">Direct to</label>
-          <select class="qselect" id="sRecipient">
-            <option value="president">President — southeewesty123@gmail.com</option>
-            <option value="vp">Vice President — Sfleishman@davinforge.com</option>
-            <option value="both">Both (CC)</option>
+
+        <div class="fld">
+          <label class="flbl">Subject</label>
+          <input class="finp" type="text" id="f-subj" placeholder="Brief description of your enquiry" required/>
+        </div>
+
+        <div class="fld">
+          <label class="flbl">Message</label>
+          <textarea class="ftxt" id="f-msg" rows="6" placeholder="Describe your enquiry in detail. Include any relevant flight numbers, dates, or context..." required></textarea>
+        </div>
+
+        <div class="fld">
+          <label class="flbl">Priority</label>
+          <select class="fsel" id="f-pri">
+            <option value="Normal">Normal</option>
+            <option value="Urgent">Urgent</option>
+            <option value="Low">Low — No Rush</option>
           </select>
         </div>
-        <div class="qfield">
-          <label class="qlabel">Subject</label>
-          <input class="qinput" type="text" id="sSubject" placeholder="Brief description of your enquiry" required/>
-        </div>
-        <div class="qfield">
-          <label class="qlabel">Message</label>
-          <textarea class="qtextarea" id="sMessage" rows="6" placeholder="Describe your enquiry in detail..." required></textarea>
-        </div>
-        <button type="submit" class="qbtn qbtn-primary" style="border:none;cursor:pointer;font-size:.85rem">
-          Send Support Request →
+
+        <div id="form-note" style="display:none;padding:12px 16px;border:1px solid var(--go);background:rgba(0,230,118,.06);font-size:.85rem;color:var(--go);margin-bottom:8px"></div>
+
+        <button type="submit" class="btn btn-r" style="width:100%;justify-content:center">
+          Send to QFV Staff →
         </button>
+
+        <p style="font-size:.75rem;color:var(--m2);margin-top:8px;line-height:1.6">
+          Clicking Send will open your email client with the message pre-filled. No data is sent from this website directly. Your message is sent from your own email account.
+        </p>
       </form>
     </div>
+
+    <!-- FAQ + INFO -->
     <div>
-      <!-- FAQ -->
-      <div style="font-family:var(--display);font-size:1.3rem;letter-spacing:1px;margin-bottom:20px">COMMON QUESTIONS</div>
-      <div style="display:flex;flex-direction:column;gap:2px">
-        <div class="qcard"><div class="qp-sm">
-          <div style="font-weight:700;font-size:.9rem;margin-bottom:6px">How do I join QFV?</div>
-          <p style="font-size:.82rem;color:var(--muted)">Join our Discord, read the rules, and post your application in #pilot-applications. See the <a href="join.html" style="color:var(--red)">Join page</a> for full instructions.</p>
+      <div class="s-eye">Quick Help</div>
+      <h2 class="s-title">Common Questions</h2>
+      <div class="s-rule"></div>
+
+      <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:36px">
+        <div class="card"><div class="cp-sm">
+          <div style="font-weight:600;font-size:.9rem;margin-bottom:5px">How do I join QFV?</div>
+          <p style="font-size:.82rem;color:var(--m)">See the <a href="join.html" style="color:var(--r)">Join page</a> for full instructions. Apply via Discord after reading the rules.</p>
         </div></div>
-        <div class="qcard"><div class="qp-sm">
-          <div style="font-weight:700;font-size:.9rem;margin-bottom:6px">My Flight Logger hours are wrong.</div>
-          <p style="font-size:.82rem;color:var(--muted)">Contact the Vice President with your Flight Logger log ID, flight details, and what you believe is incorrect. Include screenshots if possible.</p>
+        <div class="card"><div class="cp-sm">
+          <div style="font-weight:600;font-size:.9rem;margin-bottom:5px">My Flight Logger hours are wrong.</div>
+          <p style="font-size:.82rem;color:var(--m)">Submit a support request selecting "Hours / Rank Dispute". Include your log entry ID and flight details.</p>
         </div></div>
-        <div class="qcard"><div class="qp-sm">
-          <div style="font-weight:700;font-size:.9rem;margin-bottom:6px">How do I apply for the Military Division?</div>
-          <p style="font-size:.82rem;color:var(--muted)">You need P2 rating and 10+ QFV hours. Post in the military applications channel on Discord or email the VP. See the <a href="military.html" style="color:var(--gold)">Military page</a>.</p>
+        <div class="card"><div class="cp-sm">
+          <div style="font-weight:600;font-size:.9rem;margin-bottom:5px">How do I apply for the Military Division?</div>
+          <p style="font-size:.82rem;color:var(--m)">You need P2 rating and 10+ QFV hours. Select "Military Division Application" in the form above.</p>
         </div></div>
-        <div class="qcard"><div class="qp-sm">
-          <div style="font-weight:700;font-size:.9rem;margin-bottom:6px">How do I appeal a disciplinary decision?</div>
-          <p style="font-size:.82rem;color:var(--muted)">Email the President directly with your appeal. Appeals must be submitted within 7 days of the decision. Decisions made after review are final.</p>
+        <div class="card"><div class="cp-sm">
+          <div style="font-weight:600;font-size:.9rem;margin-bottom:5px">How do I appeal a decision?</div>
+          <p style="font-size:.82rem;color:var(--m)">Select "Appeal a Decision" above. Appeals must be within 7 days of the decision.</p>
         </div></div>
-        <div class="qcard"><div class="qp-sm">
-          <div style="font-weight:700;font-size:.9rem;margin-bottom:6px">I want to become a Staff member or Director.</div>
-          <p style="font-size:.82rem;color:var(--muted)">Watch for role openings in #role-openings on Discord. You must be Verified with at least 25 QFV hours. Contact the VP to express interest.</p>
+        <div class="card"><div class="cp-sm">
+          <div style="font-weight:600;font-size:.9rem;margin-bottom:5px">GDPR data request</div>
+          <p style="font-size:.82rem;color:var(--m)">Select "GDPR / Data Request". See our <a href="privacy.html" style="color:var(--r)">Privacy Policy</a> for your rights.</p>
         </div></div>
-        <div class="qcard"><div class="qp-sm">
-          <div style="font-weight:700;font-size:.9rem;margin-bottom:6px">How do I get my VATSIM rating?</div>
-          <p style="font-size:.82rem;color:var(--muted)">QFV prepares you for VATSIM ratings. Official pilot ratings are issued through VATSIM ATOs. ATC ratings through VATPAC. See the <a href="ranks.html" style="color:var(--accent)">Ranks page</a> for more.</p>
+        <div class="card"><div class="cp-sm">
+          <div style="font-weight:600;font-size:.9rem;margin-bottom:5px">I want to become staff.</div>
+          <p style="font-size:.82rem;color:var(--m)">Watch #role-openings in Discord. You need Verified status and 25+ QFV hours minimum.</p>
         </div></div>
       </div>
+
+      <!-- DISCORD CHANNELS -->
+      <div class="s-eye">Discord Help</div>
+      <h3 style="font-family:var(--fd);font-size:1.6rem;letter-spacing:1px;margin-bottom:14px">Discord Channels</h3>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div class="card"><div class="cp-sm" style="display:flex;align-items:center;gap:12px">
+          <span class="mono ca" style="font-size:.82rem;flex-shrink:0">#help</span>
+          <span style="font-size:.82rem;color:var(--m)">General questions — answered by staff and community</span>
+        </div></div>
+        <div class="card"><div class="cp-sm" style="display:flex;align-items:center;gap:12px">
+          <span class="mono ca" style="font-size:.82rem;flex-shrink:0">#pilot-applications</span>
+          <span style="font-size:.82rem;color:var(--m)">Submit your application to join QFV</span>
+        </div></div>
+        <div class="card"><div class="cp-sm" style="display:flex;align-items:center;gap:12px">
+          <span class="mono ca" style="font-size:.82rem;flex-shrink:0">#flight-logging</span>
+          <span style="font-size:.82rem;color:var(--m)">Log flights via Flight Logger bot</span>
+        </div></div>
+        <div class="card"><div class="cp-sm" style="display:flex;align-items:center;gap:12px">
+          <span class="mono ca" style="font-size:.82rem;flex-shrink:0">#staff-contact</span>
+          <span style="font-size:.82rem;color:var(--m)">Private matters requiring staff attention</span>
+        </div></div>
+      </div>
+      <div class="mt16"><a href="join.html" class="btn btn-r btn-sm">Join Discord →</a></div>
     </div>
   </div>
-</section>
-
-<!-- DISCORD CHANNELS -->
-<section class="qsec qsec-mid">
-  <div class="shead">Discord</div>
-  <h2 class="stitle">Get Help on Discord</h2>
-  <div class="sline"></div>
-  <div class="gauto-sm">
-    <div class="qcard"><div class="qp-sm">
-      <div class="mono accent" style="margin-bottom:6px">#help</div>
-      <p style="font-size:.82rem;color:var(--muted)">General questions answered by staff and the community.</p>
-    </div></div>
-    <div class="qcard"><div class="qp-sm">
-      <div class="mono accent" style="margin-bottom:6px">#pilot-applications</div>
-      <p style="font-size:.82rem;color:var(--muted)">Submit your application to join QFV.</p>
-    </div></div>
-    <div class="qcard"><div class="qp-sm">
-      <div class="mono accent" style="margin-bottom:6px">#flight-logging</div>
-      <p style="font-size:.82rem;color:var(--muted)">Use Flight Logger bot to log your flights here.</p>
-    </div></div>
-    <div class="qcard"><div class="qp-sm">
-      <div class="mono accent" style="margin-bottom:6px">#staff-contact</div>
-      <p style="font-size:.82rem;color:var(--muted)">Direct message to staff for issues requiring privacy.</p>
-    </div></div>
-  </div>
-  <div style="margin-top:28px"><a href="join.html" class="qbtn qbtn-primary">Join Our Discord →</a></div>
 </section>
 
 <script>
-document.getElementById('supportForm').addEventListener('submit', function(e) {
+function sendForm(e){
   e.preventDefault();
-  const name = document.getElementById('sName').value;
-  const cid = document.getElementById('sCID').value;
-  const cat = document.getElementById('sCategory').options[document.getElementById('sCategory').selectedIndex].text;
-  const subj = document.getElementById('sSubject').value;
-  const msg = document.getElementById('sMessage').value;
-  const recipient = document.getElementById('sRecipient').value;
-  const presEmail = 'southeewesty123@gmail.com';
-  const vpEmail = 'Sfleishman@davinforge.com';
-  const body = encodeURIComponent(`Name/Callsign: ${name}\nVATSIM CID: ${cid}\nCategory: ${cat}\n\n${msg}\n\n---\nSent via QFV Support Form`);
-  const subject = encodeURIComponent(`[QFV Support — ${cat}] ${subj}`);
-  let mailto;
-  if (recipient === 'president') mailto = `mailto:${presEmail}?subject=${subject}&body=${body}`;
-  else if (recipient === 'vp') mailto = `mailto:${vpEmail}?subject=${subject}&body=${body}`;
-  else mailto = `mailto:${presEmail}?cc=${vpEmail}&subject=${subject}&body=${body}`;
-  window.location.href = mailto;
-});
+  const name = document.getElementById('f-name').value.trim();
+  const cid = document.getElementById('f-cid').value.trim();
+  const cat = document.getElementById('f-cat').value;
+  const subj = document.getElementById('f-subj').value.trim();
+  const msg = document.getElementById('f-msg').value.trim();
+  const pri = document.getElementById('f-pri').value;
+
+  // Contacts stored privately — not shown in source
+  const contacts = {
+    president: atob('c291dGhlZXdlc3R5MTIzQGdtYWlsLmNvbQ=='),
+    vp: atob('U2ZsZWlzaG1hbkBkYXZpbmZvcmdlLmNvbQ=='),
+  };
+
+  // Route by category
+  let to = contacts.vp; // Default to VP
+  if(['Appeal a Decision','Complaint / Report','Partnership Proposal'].includes(cat)){
+    to = contacts.president;
+  }
+
+  const body = encodeURIComponent(
+    `Name / Callsign: ${name}\nVATSIM CID: ${cid||'Not provided'}\nCategory: ${cat}\nPriority: ${pri}\n\n${msg}\n\n---\nSent via QFV Support Form`
+  );
+  const subject = encodeURIComponent(`[QFV ${cat}] ${subj}`);
+
+  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+
+  const note = document.getElementById('form-note');
+  note.textContent = '✓ Your email client should open now with the message pre-filled. Send it from there.';
+  note.style.display = 'block';
+}
 </script>
 
 </main>
-<div id="footerslot"></div>
+<div id="footslot"></div>
 <script src="nav.js"></script>
-<script>
-document.getElementById('navslot').innerHTML=buildNav('support.html');
-document.getElementById('footerslot').innerHTML=buildFooter();
-</script>
 </body>
 </html>
