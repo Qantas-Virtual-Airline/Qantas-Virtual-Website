@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin Panel — Qantas Virtual QFV</title>
+<meta name="description" content="QFV — Independent virtual airline on VATSIM. ICAO QFV."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="nav-slot"></div>
+<div id="modals-slot"></div>
+<div id="cookie-slot"></div>
+<main class="page">
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">⚙ <span>ADMIN</span></div>
+    <ul class="admin-nav" id="admin-nav">
+      <li><a href="#" class="active" onclick="adminSection('overview',this)"><span class="nav-icon">📊</span>Overview</a></li>
+      <li><a href="#" onclick="adminSection('applications',this)"><span class="nav-icon">📋</span>Applications</a></li>
+      <li><a href="#" onclick="adminSection('pilots',this)"><span class="nav-icon">👥</span>Pilot Roster</a></li>
+      <li><a href="#" onclick="adminSection('flights',this)"><span class="nav-icon">✈</span>All Flights</a></li>
+      <li><a href="#" onclick="adminSection('announce',this)"><span class="nav-icon">📣</span>Announcements</a></li>
+      <li><a href="#" onclick="adminSection('settings',this)"><span class="nav-icon">⚙</span>Settings</a></li>
+    </ul>
+  </aside>
+  <div class="admin-main" id="admin-main">
+    <div style="text-align:center;padding:60px;color:var(--m)">
+      <div style="font-family:var(--fd);font-size:2rem;color:var(--r);margin-bottom:10px">ADMIN PANEL</div>
+      <p>Checking authentication...</p>
+    </div>
+  </div>
+</div>
+</main>
+<div id="footer-slot"></div>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="ui.js"></script>
+<script>window.addEventListener('DOMContentLoaded',()=>UI.init('admin.html'));</script>
+
+<script>
+const SECTIONS = {};
+
+function adminSection(name, el) {
+  document.querySelectorAll('.admin-nav a').forEach(a=>a.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const main = document.getElementById('admin-main');
+  main.innerHTML = (SECTIONS[name] ? SECTIONS[name]() : '<p style="color:var(--m)">Loading...</p>');
+}
+
+/* ── OVERVIEW ── */
+SECTIONS.overview = () => {
+  const p = DB.pilots(); const ns = DB.networkStats(); const apps = DB.apps();
+  return `
+  <h2 style="font-family:var(--fd);font-size:2rem;letter-spacing:1px;margin-bottom:20px">OVERVIEW</h2>
+  <div class="g4 mb24">
+    <div class="admin-stat"><div class="n">${p.filter(x=>x.status==='active').length}</div><div class="l">Active Pilots</div></div>
+    <div class="admin-stat"><div class="n">${ns.total}</div><div class="l">Total Flights</div></div>
+    <div class="admin-stat"><div class="n">${ns.hours}h</div><div class="l">Hours Flown</div></div>
+    <div class="admin-stat"><div class="n">${apps.filter(a=>a.status==='pending').length}</div><div class="l">Pending Apps</div></div>
+  </div>
+  <div class="g2">
+    <div class="admin-card">
+      <h3>Recent Flights</h3>
+      ${DB.recentFlights(7).slice(0,8).map(f=>`
+        <div class="fl-entry">
+          <span class="fl-fn">${f.fn}</span>
+          <span class="fl-route">${f.dep}→${f.arr}</span>
+          <span class="fl-meta">${f.ac}</span>
+          <span class="fl-meta">${f.date}</span>
+          <span class="fl-meta cm">${f.pilotName||f.pilotId}</span>
+        </div>`).join('') || '<p class="cm">No flights yet.</p>'}
+    </div>
+    <div class="admin-card">
+      <h3>Pending Applications</h3>
+      ${apps.filter(a=>a.status==='pending').map(a=>`
+        <div class="app-card pending">
+          <div style="font-weight:700">${a.name} <span class="mono cm" style="font-size:.72rem">CID: ${a.cid}</span></div>
+          <div style="font-size:.82rem;color:var(--m);margin-top:3px">${a.simulator} · ${a.experience} · ${a.date}</div>
+          <div class="ap-actions">
+            <button class="btn btn-g btn-sm" onclick="approveApp('${a.id}')">✓ Approve</button>
+            <button class="btn btn-r btn-sm" onclick="rejectApp('${a.id}')">✗ Reject</button>
+          </div>
+        </div>`).join('') || '<p class="cm">No pending applications.</p>'}
+    </div>
+  </div>`;
+};
+
+/* ── APPLICATIONS ── */
+SECTIONS.applications = () => {
+  const apps = DB.apps();
+  return `
+  <h2 style="font-family:var(--fd);font-size:2rem;letter-spacing:1px;margin-bottom:8px">APPLICATIONS</h2>
+  <p class="cm mb16" style="font-size:.88rem">Approving an application automatically adds the pilot to the roster.</p>
+  <div style="display:flex;gap:8px;margin-bottom:16px">
+    <button class="btn btn-o btn-sm" onclick="filterApps('all')">All (${apps.length})</button>
+    <button class="btn btn-o btn-sm" onclick="filterApps('pending')">Pending (${apps.filter(a=>a.status==='pending').length})</button>
+    <button class="btn btn-o btn-sm" onclick="filterApps('approved')">Approved (${apps.filter(a=>a.status==='approved').length})</button>
+    <button class="btn btn-o btn-sm" onclick="filterApps('rejected')">Rejected (${apps.filter(a=>a.status==='rejected').length})</button>
+  </div>
+  <div id="apps-list">
+    ${renderApps(apps)}
+  </div>`;
+};
+
+function renderApps(apps) {
+  if(!apps.length) return '<p class="cm">No applications.</p>';
+  return apps.map(a=>`
+    <div class="app-card ${a.status}" id="acard-${a.id}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
+        <div>
+          <span style="font-weight:700;font-size:.95rem">${a.name}</span>
+          <span class="mono cm" style="font-size:.72rem;margin-left:8px">CID: ${a.cid}</span>
+          ${a.simbrief ? `<span class="mono" style="font-size:.7rem;color:var(--ac);margin-left:8px">SimBrief: ${a.simbrief}</span>` : ''}
+        </div>
+        <span class="badge ${a.status==='pending'?'badge-au':a.status==='approved'?'badge-go':'badge-r'}">${a.status.toUpperCase()}</span>
+      </div>
+      <div style="font-size:.82rem;color:var(--m);margin-top:5px">
+        Simulator: ${a.simulator||'—'} · Experience: ${a.experience||'—'} · Applied: ${a.date}
+      </div>
+      ${a.why ? `<div style="font-size:.82rem;color:var(--m);margin-top:4px;font-style:italic">"${a.why}"</div>` : ''}
+      ${a.status==='pending' ? `
+        <div class="ap-actions">
+          <button class="btn btn-g btn-sm" onclick="approveApp('${a.id}')">✓ Approve → Add to Roster</button>
+          <button class="btn btn-r btn-sm" onclick="rejectApp('${a.id}')">✗ Reject</button>
+        </div>` : ''}
+      ${a.rejectReason ? `<div style="font-size:.78rem;color:var(--r);margin-top:5px">Rejection reason: ${a.rejectReason}</div>` : ''}
+    </div>`).join('');
+}
+
+function filterApps(status) {
+  const apps = status==='all' ? DB.apps() : DB.apps().filter(a=>a.status===status);
+  document.getElementById('apps-list').innerHTML = renderApps(apps);
+}
+
+function approveApp(id) {
+  const pilot = DB.approveApp(id);
+  if(pilot) {
+    UI.toast('✓ Approved! '+pilot.name+' added to roster as '+pilot.id);
+    adminSection('applications', null);
+  }
+}
+function rejectApp(id) {
+  const reason = prompt('Reason for rejection (optional):','');
+  if(reason === null) return;
+  DB.rejectApp(id, reason);
+  UI.toast('Application rejected.','error');
+  adminSection('applications', null);
+}
+
+/* ── PILOTS ── */
+SECTIONS.pilots = () => {
+  const pilots = DB.pilots();
+  return `
+  <h2 style="font-family:var(--fd);font-size:2rem;letter-spacing:1px;margin-bottom:8px">PILOT ROSTER</h2>
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+    <button class="btn btn-r btn-sm" onclick="showAddPilot()">+ Add Pilot</button>
+  </div>
+  <div class="tw"><table class="tbl">
+    <thead><tr><th>ID</th><th>Name</th><th>CID</th><th>SimBrief</th><th>Rating</th><th>Rank</th><th>Div</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+    ${pilots.map(p=>`
+      <tr>
+        <td class="tr">${p.id}</td>
+        <td style="font-weight:600">${p.name}</td>
+        <td class="mono tm" style="font-size:.76rem">${p.cid||'—'}</td>
+        <td class="mono" style="font-size:.72rem;color:${p.simbrief?'var(--ac)':'var(--r)'}">${p.simbrief||'NOT SET'}</td>
+        <td class="tg">${p.rating||'—'}</td>
+        <td>${p.rank||'—'}</td>
+        <td class="tm">${p.div||'civilian'}</td>
+        <td><span class="badge ${p.status==='active'?'badge-go':'badge-m'}">${p.status||'active'}</span></td>
+        <td style="display:flex;gap:4px">
+          <button class="btn btn-a btn-sm" onclick="editPilot('${p.id}')">Edit</button>
+          <button class="fl-del" onclick="deletePilot('${p.id}')">DEL</button>
+        </td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
+};
+
+function showAddPilot() {
+  const name     = prompt('Full name:');
+  if(!name) return;
+  const cid      = prompt('VATSIM CID:','');
+  const simbrief = prompt('SimBrief username:','');
+  const rank     = prompt('Rank:','Cadet');
+  const rating   = prompt('Rating:','Training (P0)');
+  DB.addPilot({ name, cid, simbrief, rank, rating, div:'civilian' });
+  UI.toast('Pilot added to roster!');
+  adminSection('pilots', null);
+}
+
+function editPilot(id) {
+  const p = DB.getPilotById(id);
+  if(!p) return;
+  const simbrief = prompt('SimBrief username:', p.simbrief||'');
+  if(simbrief===null) return;
+  const rating = prompt('VATSIM Rating:', p.rating||'');
+  if(rating===null) return;
+  const rank = prompt('QFV Rank:', p.rank||'');
+  if(rank===null) return;
+  DB.updatePilot(id, { simbrief: simbrief.trim(), rating: rating.trim(), rank: rank.trim() });
+  UI.toast('Pilot updated!');
+  adminSection('pilots', null);
+}
+
+function deletePilot(id) {
+  if(!confirm('Remove this pilot from the roster?')) return;
+  DB.removePilot(id);
+  UI.toast('Pilot removed.','error');
+  adminSection('pilots', null);
+}
+
+/* ── FLIGHTS ── */
+SECTIONS.flights = () => {
+  const all = DB.flights().slice(0,100);
+  return `
+  <h2 style="font-family:var(--fd);font-size:2rem;letter-spacing:1px;margin-bottom:16px">ALL FLIGHTS</h2>
+  <div class="tw"><table class="tbl">
+    <thead><tr><th>Date</th><th>Flight</th><th>Pilot</th><th>Route</th><th>Aircraft</th><th>Block</th><th>Network</th><th>Del</th></tr></thead>
+    <tbody>${all.map(f=>`
+      <tr>
+        <td class="mono tm" style="font-size:.74rem">${f.date}</td>
+        <td class="tr">${f.fn}</td>
+        <td class="cm">${f.pilotName||f.pilotId}</td>
+        <td style="font-weight:600">${f.dep}→${f.arr}</td>
+        <td class="tg">${f.ac}</td>
+        <td class="cm">${f.block}</td>
+        <td><span class="badge ${f.network==='VATSIM'?'badge-go':'badge-m'}">${f.network||'VATSIM'}</span></td>
+        <td><button class="fl-del" onclick="adminDelFlight('${f.id}')">DEL</button></td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
+};
+
+function adminDelFlight(id) {
+  if(!confirm('Delete this flight log?')) return;
+  DB.removeFlight(id);
+  UI.toast('Flight deleted.','error');
+  adminSection('flights', null);
+}
+
+/* ── ANNOUNCEMENTS ── */
+SECTIONS.announce = () => `
+  <h2 style="font-family:var(--fd);font-size:2rem;letter-spacing:1px;margin-bottom:16px">ANNOUNCEMENTS</h2>
+  <div class="admin-card">
+    <h3>New Announcement</h3>
+    <div class="form">
+      <div class="fld"><label class="flbl">Title</label><input class="finp" id="ann-title" placeholder="Announcement title"/></div>
+      <div class="fld"><label class="flbl">Body</label><textarea class="ftxt" id="ann-body" rows="3" placeholder="Announcement text..."></textarea></div>
+      <button class="btn btn-r btn-sm" onclick="postAnnouncement()">Post Announcement</button>
+    </div>
+  </div>
+  <div id="ann-list">
+    ${DB.announcements().map(a=>`
+      <div class="alert ao">
+        <div style="flex:1"><strong>${a.title}</strong><br>${a.body}<br>
+        <span style="font-family:var(--fm);font-size:.6rem;color:var(--m)">${a.date}</span></div>
+        <button class="fl-del" onclick="removeAnn('${a.id}')">DEL</button>
+      </div>`).join('') || '<p class="cm">No announcements.</p>'}
+  </div>`;
+
+function postAnnouncement() {
+  const title = document.getElementById('ann-title').value.trim();
+  const body  = document.getElementById('ann-body').value.trim();
+  if(!title||!body){ UI.toast('Fill in title and body.','error'); return; }
+  DB.addAnnouncement({title,body});
+  UI.toast('Announcement posted!');
+  adminSection('announce',null);
+}
+function removeAnn(id) {
+  DB.removeAnnouncement(id);
+  adminSection('announce',null);
+}
+
+/* ── SETTINGS ── */
+SECTIONS.settings = () => {
+  const s = DB.settings();
+  return `
+  <h2 style="font-family:var(--fd);font-size:2rem;letter-spacing:1px;margin-bottom:20px">SETTINGS</h2>
+  <div class="admin-card">
+    <h3>Site Controls</h3>
+    ${[
+      ['apps_open',     'Applications Open',    'Allow new pilot applications'],
+      ['military_open', 'Military Division',     'Show Military Division section'],
+      ['roster_public', 'Roster Public',         'Make pilot roster publicly visible'],
+      ['maintenance',   'Maintenance Mode',      'Show maintenance banner on all pages'],
+    ].map(([key,label,desc])=>`
+      <div class="setting-row">
+        <div><div class="setting-label">${label}</div><div class="setting-desc">${desc}</div></div>
+        <label class="toggle-switch">
+          <input type="checkbox" ${s[key]?'checked':''} onchange="DB.saveSetting('${key}',this.checked);UI.toast('${label} ${s[key]?'disabled':'enabled'}')"/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>`).join('')}
+    <div class="setting-row">
+      <div><div class="setting-label">Site Notice</div><div class="setting-desc">Shown on all pages (leave blank to hide)</div></div>
+      <input class="finp" style="max-width:260px" value="${s.site_notice||''}" onblur="DB.saveSetting('site_notice',this.value);UI.toast('Site notice updated')"/>
+    </div>
+  </div>
+  <div class="admin-card">
+    <h3>External Links</h3>
+    <div class="form">
+      <div class="fld"><label class="flbl">Discord Invite URL</label>
+        <input class="finp" id="set-discord" value="${s.discord_invite||''}" placeholder="https://discord.gg/..."/>
+      </div>
+      <div class="fld"><label class="flbl">Moodle LMS URL</label>
+        <input class="finp" id="set-moodle" value="${s.moodle_url||''}" placeholder="https://moodle.your-domain.com"/>
+      </div>
+      <button class="btn btn-r btn-sm" onclick="saveLinks()">Save Links</button>
+    </div>
+  </div>
+  <div class="admin-card vatsim-oauth-box">
+    <h3>VATSIM OAuth Integration</h3>
+    <div class="alert aa mb16"><span class="a-icon">ℹ</span><div class="a-body">
+      To enable VATSIM Login: Register your site at <a href="https://auth.vatsim.net" target="_blank" style="color:var(--ac)">auth.vatsim.net</a>.
+      Set your redirect URI to <strong>${location.origin + location.pathname.replace('admin.html','oauth-callback.html')}</strong>.
+      Then enter your Client ID below. A backend proxy is required to exchange the auth code for a token on production.
+    </div></div>
+    <div class="form">
+      <div class="fld"><label class="flbl">VATSIM OAuth Client ID</label>
+        <input class="finp" id="set-vatsim-cid" value="${s.vatsim_client_id||''}" placeholder="Your VATSIM OAuth client ID"/>
+      </div>
+      <div class="setting-row" style="margin-top:8px">
+        <div><div class="setting-label">Enable VATSIM Login Button</div></div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="set-vatsim-on" ${s.vatsim_oauth_on?'checked':''}/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <button class="btn btn-a btn-sm" onclick="saveVatsimOAuth()">Save VATSIM Settings</button>
+    </div>
+  </div>
+  <div class="admin-card" style="border-left:3px solid var(--au)">
+    <h3 style="color:var(--au)">&#x1F550; Schedule Downtime</h3>
+    <div class="alert ao mb16"><span class="a-icon">&#9432;</span><div class="a-body">
+      Schedule a maintenance window. A countdown banner will appear on the Support page. While active, a red live-countdown banner is shown to all users.
+    </div></div>
+    <div class="form">
+      <div class="setting-row">
+        <div><div class="setting-label">Downtime Scheduled</div><div class="setting-desc">Enable the scheduled downtime banner</div></div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="dt-on" ${s.downtime_scheduled?"checked":""}
+            onchange="DB.saveSetting('downtime_scheduled',this.checked);UI.toast(this.checked?'Downtime scheduled!':'Downtime cancelled.')"/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-label">Show Countdown Banner</div><div class="setting-desc">Display countdown on Support page and all pages</div></div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="dt-banner" ${s.downtime_banner!==false?"checked":""}
+            onchange="DB.saveSetting('downtime_banner',this.checked)"/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="frow">
+        <div class="fld"><label class="flbl">Start Date &amp; Time</label>
+          <input class="finp" type="datetime-local" id="dt-start" value="${s.downtime_start?s.downtime_start.slice(0,16):''}" />
+        </div>
+        <div class="fld"><label class="flbl">End Date &amp; Time</label>
+          <input class="finp" type="datetime-local" id="dt-end" value="${s.downtime_end?s.downtime_end.slice(0,16):''}" />
+        </div>
+      </div>
+      <div class="fld"><label class="flbl">Reason / Message</label>
+        <input class="finp" id="dt-reason" value="${s.downtime_reason||'Scheduled maintenance'}" placeholder="e.g. Server updates, database migration"/>
+      </div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <button class="btn btn-gold btn-sm" onclick="saveDowntime()">Save Schedule</button>
+        <button class="btn btn-r btn-sm" onclick="cancelDowntime()">Cancel Downtime</button>
+        <a href="support.html" target="_blank" class="btn btn-o btn-sm">Preview &#x2197;</a>
+      </div>
+      <div id="dt-preview" style="margin-top:8px;font-family:var(--fm);font-size:.7rem;color:var(--au)"></div>
+    </div>
+  </div>
+  <div class="admin-card" style="border-left:3px solid var(--ac)">
+    <h3 style="color:var(--ac)">&#x1F3AB; Support Tickets</h3>
+    <div id="ticket-admin-summary" style="margin-bottom:12px"></div>
+    <a href="support.html" target="_blank" class="btn btn-a btn-sm">Open Full Ticket Manager &#x2197;</a>
+  </div>
+  <div class="admin-card">
+    <h3>Data Management</h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-o btn-sm" onclick="exportAllData()">Export All Data (JSON)</button>
+      <button class="btn btn-r btn-sm" onclick="clearFlights()">Clear All Flights</button>
+      <button class="btn btn-r btn-sm" onclick="clearTickets()">Clear All Tickets</button>
+    </div>
+  </div>`;
+
+  // Populate ticket summary
+  setTimeout(() => {
+    const el = document.getElementById("ticket-admin-summary");
+    if (!el) return;
+    const ts = DB.ticketStats();
+    el.innerHTML = \`<div class="g4">
+      <div class="admin-stat"><div class="n" style="color:var(--r)">\${ts.open}</div><div class="l">Open</div></div>
+      <div class="admin-stat"><div class="n" style="color:var(--go)">\${ts.replied}</div><div class="l">Replied</div></div>
+      <div class="admin-stat"><div class="n" style="color:var(--au)">\${ts.waiting}</div><div class="l">Waiting</div></div>
+      <div class="admin-stat"><div class="n" style="color:var(--m)">\${ts.closed}</div><div class="l">Closed</div></div>
+    </div>\`;
+  }, 50);
+};
+
+function saveLinks() {
+  DB.saveSetting('discord_invite', document.getElementById('set-discord').value.trim());
+  DB.saveSetting('moodle_url', document.getElementById('set-moodle').value.trim());
+  UI.toast('Links saved!');
+  // Patch join page discord link in memory
+}
+function saveVatsimOAuth() {
+  DB.saveSetting('vatsim_client_id', document.getElementById('set-vatsim-cid').value.trim());
+  DB.saveSetting('vatsim_oauth_on', document.getElementById('set-vatsim-on').checked);
+  UI.toast('VATSIM OAuth settings saved!');
+}
+function saveDowntime() {
+  const start  = document.getElementById('dt-start')?.value;
+  const end    = document.getElementById('dt-end')?.value;
+  const reason = document.getElementById('dt-reason')?.value.trim();
+  if(!start || !end){ UI.toast('Set both start and end times.','error'); return; }
+  if(new Date(start) >= new Date(end)){ UI.toast('End must be after start.','error'); return; }
+  DB.saveSettings({
+    downtime_start:     new Date(start).toISOString(),
+    downtime_end:       new Date(end).toISOString(),
+    downtime_reason:    reason || 'Scheduled maintenance',
+    downtime_scheduled: true,
+    downtime_banner:    document.getElementById('dt-banner')?.checked ?? true,
+  });
+  const prev = document.getElementById('dt-preview');
+  if(prev) prev.textContent = '✓ Saved — downtime scheduled from ' + fmtDateTime(new Date(start).toISOString()) + ' to ' + fmtDateTime(new Date(end).toISOString());
+  UI.toast('Downtime schedule saved!');
+}
+
+function cancelDowntime() {
+  DB.saveSettings({ downtime_scheduled:false, downtime_start:'', downtime_end:'', downtime_reason:'' });
+  const dt = document.getElementById('dt-on'); if(dt) dt.checked = false;
+  const prev = document.getElementById('dt-preview'); if(prev) prev.textContent = 'Downtime cleared.';
+  UI.toast('Downtime cancelled.','error');
+}
+
+function clearTickets() {
+  if(!confirm('Clear ALL support tickets? This cannot be undone.')) return;
+  DB.saveTickets([]);
+  UI.toast('All tickets cleared.','error');
+  adminSection('settings', null);
+}
+
+function exportAllData() {
+  const d = { pilots:DB.pilots(), flights:DB.flights(), applications:DB.apps(), settings:DB.settings() };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));
+  a.download = 'QFV_Data_'+today()+'.json';
+  a.click();
+  UI.toast('Data exported!');
+}
+function clearFlights() {
+  if(!confirm('Clear ALL flight logs? This cannot be undone.')) return;
+  DB.saveFlights([]);
+  UI.toast('All flights cleared.','error');
+  adminSection('flights',null);
+}
+
+/* ── INIT ── */
+window.addEventListener('DOMContentLoaded', () => {
+  if(!Auth.logged) { location.href='index.html'; return; }
+  if(!Auth.isAdmin) { UI.toast('Access denied. Admin only.','error'); setTimeout(()=>location.href='index.html',1500); return; }
+  adminSection('overview', document.querySelector('.admin-nav a'));
+});
+</script>
+
+</body></html>

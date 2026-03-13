@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Boeing 737-800 SOP — Qantas Virtual QFV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="nav-slot"></div>
+<div id="modals-slot"></div>
+<div id="cookie-slot"></div>
+<main class="page">
+
+<section style="padding:72px 48px 44px;background:var(--k2);border-bottom:1px solid rgba(200,16,46,.15);position:relative;overflow:hidden">
+  <div class="hero-grid"></div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;position:relative;z-index:2">
+    <div>
+      <div class="s-eye">Standard Operating Procedure</div>
+      <h1 style="font-family:var(--fd);font-size:clamp(3rem,8vw,6rem);line-height:.9;letter-spacing:1px">
+        <span style="color:var(--r)">B738</span><br><span style="color:var(--w)">BOEING 737-800</span>
+      </h1>
+      <p style="font-size:.9rem;color:var(--m);margin-top:8px;max-width:480px;line-height:1.7">Short to medium-haul domestic and regional routes</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-self:flex-end">
+      <span class="badge badge-r">R1 CADET</span>
+      <a href="fleet.html" class="btn btn-o btn-sm">← Back to Fleet</a>
+      <button class="btn btn-a btn-sm" onclick="openLogModal()">Log a B738 Flight</button>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-k2">
+  <div class="s-eye">Specifications</div>
+  <h2 class="s-title">Aircraft Data</h2>
+  <div class="s-rule"></div>
+  <div class="g2">
+    <div class="tw">
+      <table class="tbl">
+        <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td class="tm">Cruise Mach</td><td class="tr">M0.785</td></tr>
+          <tr><td class="tm">Cruise Altitude</td><td style="font-weight:600">FL330–FL410</td></tr>
+          <tr><td class="tm">Range</td><td style="font-weight:600">4,800 km / 2,990 nm</td></tr>
+          <tr><td class="tm">Engines</td><td style="font-weight:600">CFM56-7B27</td></tr>
+          <tr><td class="tm">Typical Seating</td><td style="font-weight:600">174 (Qantas config)</td></tr>
+          <tr><td class="tm">SimBrief Code</td><td class="tr">B738</td></tr>
+          <tr><td class="tm">VATSIM Flight Plan</td><td class="tr">B738/M</td></tr>
+          <tr><td class="tm">Minimum Rank</td><td class="to">R1 CADET</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="sop-callout"><strong>Operating Limits Summary</strong><br><br>Max operating altitude: FL410<br>Vmo: 340 KIAS / MMO: 0.82<br>MTOW: 79,015 kg<br>Max fuel: 26,025 L<br>Flap limit speeds: F1=250, F5=250, F10=210, F15=200, F25=180, F30=170, F40=158</div>
+      <div class="alert ao mt16"><span class="a-icon">📌</span><div class="a-body">The 737-800 is the entry-level aircraft for all QFV cadets. All new pilots start here. Recommended addons: PMDG 737 (MSFS), Zibo 737 (XP12).</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-k">
+  <div class="s-eye">Departure</div>
+  <h2 class="s-title">Departure Procedure</h2>
+  <div class="s-rule"></div>
+  <div class="sop-section"><div class="sop-step"><div class="sop-step-num">1</div><div class="sop-step-body"><div class="sop-step-title">Pre-flight & SimBrief OFP</div><div class="sop-step-desc">Generate your Operational Flight Plan at simbrief.com using this aircraft's ICAO code. Review fuel, routing, alternates, and performance data. Load the OFP into your FMS via SimBrief integration.</div></div></div>
+<div class="sop-step"><div class="sop-step-num">2</div><div class="sop-step-body"><div class="sop-step-title">ATIS & Clearance</div><div class="sop-step-desc">Obtain ATIS on the published frequency. Contact Clearance Delivery (or Ground if no DEL) for your IFR clearance. Confirm SID, squawk, initial altitude, and departure frequency. Readback clearance in full.</div></div></div>
+<div class="sop-step"><div class="sop-step-num">3</div><div class="sop-step-body"><div class="sop-step-title">Engine Start & Pushback</div><div class="sop-step-desc">Complete pre-start checks per aircraft checklist. Request pushback from Ground if required. Start engines per normal start procedure. Monitor engine parameters throughout.</div></div></div>
+<div class="sop-step"><div class="sop-step-num">4</div><div class="sop-step-body"><div class="sop-step-title">Taxi & Line-Up</div><div class="sop-step-desc">After receiving taxi clearance, follow the assigned routing to the runway. Hold short as instructed. Confirm runway assignment matches IFR clearance before entering.</div></div></div>
+<div class="sop-step"><div class="sop-step-num">5</div><div class="sop-step-body"><div class="sop-step-title">Departure</div><div class="sop-step-desc">On Tower clearance, advance thrust smoothly to flex/TOGA thrust. Follow SID routing precisely. Engage autopilot when above minimum engagement altitude. Check in with Departure on handoff.</div></div></div></div>
+</section>
+
+<section class="sec sec-k2">
+  <div class="s-eye">Arrival</div>
+  <h2 class="s-title">Arrival & Approach</h2>
+  <div class="s-rule"></div>
+  <div class="sop-section"><div class="sop-step"><div class="sop-step-num">1</div><div class="sop-step-body"><div class="sop-step-title">Descent Planning</div><div class="sop-step-desc">Begin top-of-descent planning 200–250nm from destination. Use FMS PROG page for descent profile. Obtain ATIS well in advance. Brief approach plate and minima.</div></div></div>
+<div class="sop-step"><div class="sop-step-num">2</div><div class="sop-step-body"><div class="sop-step-title">STAR & Approach</div><div class="sop-step-desc">Follow assigned STAR routing. Manage speed per ATC instructions and STAR constraints. Configure aircraft per approach profile. Brief go-around procedure.</div></div></div>
+<div class="sop-step"><div class="sop-step-num">3</div><div class="sop-step-body"><div class="sop-step-title">Final Approach</div><div class="sop-step-desc">Establish on final at or below glideslope. Complete landing checklist. Stabilised approach criteria: on speed, on profile, configured, by 1,000ft AAL. If not stabilised — go around.</div></div></div>
+<div class="sop-step"><div class="sop-step-num">4</div><div class="sop-step-body"><div class="sop-step-title">Landing & Rollout</div><div class="sop-step-desc">Maintain centreline throughout flare. Apply reverse thrust and autobrake/manual braking as required. Clear the runway at the first available exit.</div></div></div>
+<div class="sop-step"><div class="sop-step-num">5</div><div class="sop-step-body"><div class="sop-step-title">Post-Landing & Log</div><div class="sop-step-desc">Complete after-landing checklist. Taxi to gate per Ground instructions. Shutdown per checklist. Log your flight via the Pilot Dashboard within 48 hours.</div></div></div></div>
+</section>
+
+<section class="sec sec-p">
+  <div class="s-eye">Typical Routes</div>
+  <h2 class="s-title">Where This Aircraft Flies</h2>
+  <div class="s-rule"></div>
+  <div class="tw">
+    <table class="tbl">
+      <thead><tr><th>Flight No.</th><th>From</th><th>To</th><th>Block</th></tr></thead>
+      <tbody><tr><td class='tr'>QFV400/401</td><td>YSSY</td><td>YMML</td><td class='tm'>1h 25m</td></tr><tr><td class='tr'>QFV410/411</td><td>YSSY</td><td>YBBN</td><td class='tm'>1h 30m</td></tr><tr><td class='tr'>QFV430/431</td><td>YSSY</td><td>YPPH</td><td class='tm'>5h 05m</td></tr><tr><td class='tr'>QFV470/471</td><td>YBBN</td><td>YBCS</td><td class='tm'>2h 00m</td></tr></tbody>
+    </table>
+  </div>
+  <div class="mt16"><a href="routes.html" class="btn btn-o btn-sm">Full Route Network →</a></div>
+</section>
+</main>
+<div id="footer-slot"></div>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="ui.js"></script>
+<script>window.addEventListener('DOMContentLoaded',()=>UI.init('sop-b738.html'));</script>
+
+</body></html>

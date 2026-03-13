@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Routes — Qantas Virtual QFV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="nav-slot"></div>
+<div id="modals-slot"></div>
+<div id="cookie-slot"></div>
+<main class="page">
+
+<section class="hero" style="min-height:48vh">
+  <div class="hero-grid"></div><div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="h-eye">Network</div>
+    <h1 class="h-title"><span class="ht1">ROUTE</span><br><span class="ht3">NETWORK</span></h1>
+    <p class="h-sub">All routes modelled on real Qantas operations. Plan via SimBrief, fly on VATSIM, log within 48 hours.</p>
+  </div>
+</section>
+<section class="sec sec-k2">
+  <div class="alert ag mb20"><span class="a-icon">📌</span><div class="a-body"><strong>Every flight:</strong> SimBrief OFP → VATSIM IFR flight plan → Fly → Log via Pilot Dashboard within 48 hours.</div></div>
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px">
+    <button class="btn btn-r btn-sm" style="clip-path:none" onclick="showTab('dom',this)">Domestic</button>
+    <button class="btn btn-o btn-sm" onclick="showTab('tas',this)">Trans-Tasman</button>
+    <button class="btn btn-o btn-sm" onclick="showTab('ints',this)">Short Intl</button>
+    <button class="btn btn-o btn-sm" onclick="showTab('intl',this)">Long-Haul</button>
+  </div>
+  <div id="tab-dom">
+    <div class="tw"><table class="tbl"><thead><tr><th>Flight</th><th>From</th><th>To</th><th>Aircraft</th><th>Block</th><th>Rank</th></tr></thead><tbody>
+      <tr><td class="tr">QFV400/401</td><td>YSSY</td><td>YMML</td><td>B738, A21N</td><td>1h 25m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV410/411</td><td>YSSY</td><td>YBBN</td><td>B738, A21N</td><td>1h 30m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV420/421</td><td>YSSY</td><td>YBCG</td><td>B738</td><td>1h 20m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV430/431</td><td>YSSY</td><td>YPPH</td><td>B738, A21N</td><td>5h 05m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV440/441</td><td>YMML</td><td>YPAD</td><td>B738</td><td>1h 05m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV442/443</td><td>YMML</td><td>YBBN</td><td>B738, A21N</td><td>2h 00m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV444/445</td><td>YMML</td><td>YPPH</td><td>B738, A21N</td><td>4h 25m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV450/451</td><td>YSSY</td><td>YPAD</td><td>B738</td><td>1h 55m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV460/461</td><td>YBBN</td><td>YBCS</td><td>B738</td><td>2h 00m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV462/463</td><td>YSSY</td><td>YBCS</td><td>B738</td><td>2h 55m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV470/471</td><td>YMML</td><td>YBTL</td><td>B738</td><td>2h 55m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV480/481</td><td>YMML</td><td>YHOZ</td><td>B738</td><td>1h 10m</td><td class="tm">R1</td></tr>
+    </tbody></table></div>
+  </div>
+  <div id="tab-tas" hidden>
+    <div class="tw"><table class="tbl"><thead><tr><th>Flight</th><th>From</th><th>To</th><th>Aircraft</th><th>Block</th><th>Rank</th></tr></thead><tbody>
+      <tr><td class="tr">QFV101/102</td><td>YSSY</td><td>NZAA</td><td>B738, A21N</td><td>3h 20m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV103/104</td><td>YMML</td><td>NZAA</td><td>A332</td><td>3h 45m</td><td class="tm">R3</td></tr>
+      <tr><td class="tr">QFV105/106</td><td>YSSY</td><td>NZCH</td><td>B738</td><td>3h 30m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV107/108</td><td>YSSY</td><td>NZWN</td><td>B738</td><td>3h 25m</td><td class="tm">R1</td></tr>
+      <tr><td class="tr">QFV130/131</td><td>YSSY</td><td>NFFN</td><td>A332</td><td>3h 50m</td><td class="tm">R3</td></tr>
+    </tbody></table></div>
+  </div>
+  <div id="tab-ints" hidden>
+    <div class="tw"><table class="tbl"><thead><tr><th>Flight</th><th>From</th><th>To</th><th>Aircraft</th><th>Block</th><th>Rank</th></tr></thead><tbody>
+      <tr><td class="tr">QFV001/002</td><td>YSSY</td><td>WSSS</td><td>A333</td><td>8h 05m</td><td class="tm">R3</td></tr>
+      <tr><td class="tr">QFV003/004</td><td>YMML</td><td>WSSS</td><td>A333</td><td>7h 35m</td><td class="tm">R3</td></tr>
+      <tr><td class="tr">QFV010/011</td><td>YSSY</td><td>VHHH</td><td>A333</td><td>9h 05m</td><td class="tm">R3</td></tr>
+      <tr><td class="tr">QFV012/013</td><td>YSSY</td><td>ZBAA</td><td>A333</td><td>11h 00m</td><td class="tm">R3</td></tr>
+      <tr><td class="tr">QFV015/016</td><td>YSSY</td><td>WADD</td><td>B738, A333</td><td>6h 00m</td><td class="tm">R1/R3</td></tr>
+      <tr><td class="tr">QFV017/018</td><td>YSSY</td><td>WMKK</td><td>A332</td><td>8h 40m</td><td class="tm">R3</td></tr>
+      <tr><td class="tr">QFV050/051</td><td>YSSY</td><td>NADI</td><td>A332</td><td>3h 40m</td><td class="tm">R3</td></tr>
+    </tbody></table></div>
+  </div>
+  <div id="tab-intl" hidden>
+    <div class="tw"><table class="tbl"><thead><tr><th>Flight</th><th>From</th><th>To</th><th>Aircraft</th><th>Block</th><th>Rank</th></tr></thead><tbody>
+      <tr><td class="tr">QFV007/008</td><td>YSSY</td><td>EGLL (via WSSS)</td><td>A388</td><td>22h 00m</td><td class="tm">R5+</td></tr>
+      <tr><td class="tr">QFV009/012</td><td>YPPH</td><td>EGLL (non-stop)</td><td>B789</td><td>17h 20m</td><td class="tm">R4</td></tr>
+      <tr><td class="tr">QFV020/021</td><td>YSSY</td><td>KLAX</td><td>A388, B789</td><td>14h 50m</td><td class="tm">R4/R5</td></tr>
+      <tr><td class="tr">QFV022/023</td><td>YMML</td><td>KLAX</td><td>B789</td><td>15h 30m</td><td class="tm">R4</td></tr>
+      <tr><td class="tr">QFV025/026</td><td>YSSY</td><td>KDFW</td><td>B789</td><td>17h 00m</td><td class="tm">R4</td></tr>
+      <tr><td class="tr">QFV030/031</td><td>YSSY</td><td>RJTT</td><td>B789</td><td>9h 40m</td><td class="tm">R4</td></tr>
+      <tr><td class="tr">QFV032/033</td><td>YSSY</td><td>RJBB</td><td>B789</td><td>9h 30m</td><td class="tm">R4</td></tr>
+      <tr><td class="tr">QFV035/036</td><td>YSSY</td><td>RJAA</td><td>B789</td><td>9h 35m</td><td class="tm">R4</td></tr>
+      <tr><td class="tr">QFV040/041</td><td>YSSY</td><td>OMDB</td><td>A388</td><td>14h 00m</td><td class="tm">R5+</td></tr>
+      <tr><td class="tr">QFV045/046</td><td>YSSY</td><td>FAOR</td><td>B789</td><td>14h 30m</td><td class="tm">R4</td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+</main>
+<div id="footer-slot"></div>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="ui.js"></script>
+<script>window.addEventListener('DOMContentLoaded',()=>UI.init('routes.html'));</script>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('[id^="tab-"]').forEach(p => p.hidden = true);
+  document.getElementById('tab-'+id).hidden = false;
+  document.querySelectorAll('button[onclick^="showTab"]').forEach(b => {
+    b.className = 'btn btn-o btn-sm';
+    b.style.clipPath = 'none';
+  });
+  btn.className = 'btn btn-r btn-sm';
+  btn.style.clipPath = 'none';
+}
+</script>
+
+</body></html>

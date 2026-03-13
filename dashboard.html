@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Pilot Dashboard — Qantas Virtual QFV</title>
+<meta name="description" content="QFV — Independent virtual airline on VATSIM. ICAO QFV."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="nav-slot"></div>
+<div id="modals-slot"></div>
+<div id="cookie-slot"></div>
+<main class="page">
+
+<div id="dash-root">
+  <div style="padding:80px 48px;text-align:center;color:var(--m)">
+    <div style="font-family:var(--fd);font-size:3rem;color:var(--r);margin-bottom:12px">PILOT DASHBOARD</div>
+    <p style="margin-bottom:20px">Log in to access your pilot dashboard.</p>
+    <button class="btn btn-r" onclick="UI.modal('login-modal')">LOG IN</button>
+  </div>
+</div>
+</main>
+<div id="footer-slot"></div>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="ui.js"></script>
+<script>window.addEventListener('DOMContentLoaded',()=>UI.init('dashboard.html'));</script>
+
+<script>
+function refreshDashboard() {
+  if(!Auth.logged){ return; }
+  const sess = Auth.session;
+  const pilot = Auth.pilot;
+  const stats = pilot ? DB.pilotStats(pilot.id) : { total:0, recent90:0, hours:0, mins:0 };
+  const flights = pilot ? DB.flightsFor(pilot.id) : [];
+
+  document.getElementById('dash-root').innerHTML = `
+    <div class="dash-header">
+      <div class="hero-grid"></div>
+      <div class="dash-pilot">
+        <div>
+          <div class="dash-id">${pilot?.id || 'UNREGISTERED'} · ${sess.cid}</div>
+          <div class="dash-name">${pilot?.name || sess.name}</div>
+          <div class="dash-rank">${pilot?.rank || 'Pending Verification'} · ${pilot?.rating || 'Training (P0)'}</div>
+          ${sess.simbrief ? `<div style="font-family:var(--fm);font-size:.6rem;color:var(--ac);margin-top:4px">SimBrief: ${sess.simbrief}</div>` : '<div style="font-family:var(--fm);font-size:.6rem;color:var(--r);margin-top:4px">⚠ No SimBrief username set — add it via Edit Profile</div>'}
+        </div>
+        <div class="dash-actions">
+          <button class="btn btn-r" onclick="openLogModal()">+ Log Flight</button>
+          <button class="btn btn-a btn-sm" onclick="exportFlights()">Export CSV</button>
+          <button class="btn btn-o btn-sm" onclick="showEditProfile()">Edit Profile</button>
+          ${Auth.isAdmin ? '<a href="admin.html" class="btn btn-gold btn-sm">Admin Panel ↗</a>' : ''}
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:24px 48px">
+      <div class="g4 mb24">
+        <div class="card"><div class="cp tc"><div class="st-n">${stats.total}</div><div class="st-l">Total Flights</div></div></div>
+        <div class="card"><div class="cp tc"><div class="st-n">${stats.hours}h ${stats.mins}m</div><div class="st-l">Total Hours</div></div></div>
+        <div class="card"><div class="cp tc"><div class="st-n">${stats.recent90}</div><div class="st-l">Flights (90d)</div></div></div>
+        <div class="card"><div class="cp tc"><div class="st-n">${pilot?.div?.toUpperCase()||'CIV'}</div><div class="st-l">Division</div></div></div>
+      </div>
+
+      <div class="dash-tabs">
+        <button class="dash-tab active" onclick="switchDashTab('flights',this)">My Flights</button>
+        <button class="dash-tab" onclick="switchDashTab('profile',this)">Profile</button>
+        <button class="dash-tab" onclick="switchDashTab('training',this)">Training</button>
+      </div>
+
+      <div class="dash-pane active" id="dpane-flights">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div class="s-eye">Flight Log</div>
+          <button class="btn btn-r btn-sm" onclick="openLogModal()">+ New Flight</button>
+        </div>
+        ${flights.length === 0 ? `
+          <div style="padding:40px;text-align:center;border:1px dashed rgba(255,255,255,.1)">
+            <div style="font-family:var(--fd);font-size:1.8rem;color:var(--m);margin-bottom:8px">NO FLIGHTS LOGGED</div>
+            <p style="color:var(--m2);font-size:.88rem;margin-bottom:14px">Your first flight starts with a SimBrief OFP.</p>
+            <button class="btn btn-r" onclick="openLogModal()">Log Your First Flight</button>
+          </div>` :
+          flights.map(f=>`
+          <div class="fl-entry">
+            <span class="fl-fn">${f.fn}</span>
+            <span class="fl-route">${f.dep} → ${f.arr}</span>
+            <span class="fl-meta">${f.ac}</span>
+            <span class="fl-meta">${f.block}</span>
+            <span class="fl-meta">${f.date}</span>
+            <span class="fl-net-badge">${f.network||'VATSIM'}</span>
+            ${f.notes ? `<span class="fl-meta cm" style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.notes}</span>` : ''}
+            <button class="fl-del" onclick="delFlight('${f.id}')">DEL</button>
+          </div>`).join('')
+        }
+      </div>
+
+      <div class="dash-pane" id="dpane-profile">
+        <div class="card mt16"><div class="cp">
+          <div style="font-family:var(--fd);font-size:1.3rem;letter-spacing:1px;margin-bottom:14px">PILOT PROFILE</div>
+          <div class="tw"><table class="tbl">
+            <tr><td class="tm" style="width:180px">Pilot ID</td><td class="tr">${pilot?.id||'Unassigned'}</td></tr>
+            <tr><td class="tm">VATSIM CID</td><td>${sess.cid}</td></tr>
+            <tr><td class="tm">Name</td><td>${pilot?.name||sess.name}</td></tr>
+            <tr><td class="tm">SimBrief Username</td><td>${pilot?.simbrief||sess.simbrief||'<span style="color:var(--r)">Not set</span>'}</td></tr>
+            <tr><td class="tm">Current Rating</td><td class="tg">${pilot?.rating||'Training (P0)'}</td></tr>
+            <tr><td class="tm">Rank</td><td>${pilot?.rank||'Cadet'}</td></tr>
+            <tr><td class="tm">Division</td><td>${pilot?.div||'Civilian'}</td></tr>
+            <tr><td class="tm">Status</td><td><span class="badge badge-go">${pilot?.status||'active'}</span></td></tr>
+            <tr><td class="tm">Joined</td><td>${pilot?.joined||sess.loginAt?new Date(sess.loginAt).toLocaleDateString():'—'}</td></tr>
+          </table></div>
+          <button class="btn btn-a btn-sm mt16" onclick="showEditProfile()">Edit SimBrief Username</button>
+        </div></div>
+      </div>
+
+      <div class="dash-pane" id="dpane-training">
+        <div class="alert aa mb16"><span class="a-icon">🎓</span><div class="a-body">QFV uses <strong>Moodle</strong> for training. Click below to access your training portal. Log in with your QFV credentials.</div></div>
+        <div class="g2">
+          <div class="card card-a"><div class="cp">
+            <div style="font-family:var(--fd);font-size:1.3rem;margin-bottom:8px">MOODLE LMS</div>
+            <p style="font-size:.87rem;color:var(--m);line-height:1.65;margin-bottom:12px">Access your full training curriculum, complete modules, and track your progress toward VATSIM pilot ratings.</p>
+            <a href="#" id="moodle-link" class="btn btn-a btn-sm" target="_blank">Open Moodle Training Portal ↗</a>
+          </div></div>
+          <div class="card"><div class="cp">
+            <div style="font-family:var(--fd);font-size:1.3rem;margin-bottom:8px">TRAINING PAGES</div>
+            <p style="font-size:.87rem;color:var(--m);line-height:1.65;margin-bottom:12px">Browse training content directly on this site — theory, SOPs, procedures, and curriculum overviews.</p>
+            <a href="training.html" class="btn btn-o btn-sm">View Training Curriculum</a>
+          </div></div>
+        </div>
+        <div style="margin-top:20px">
+          <div class="s-eye">Your Aircraft SOPs</div>
+          <div class="ga-sm mt8" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:2px">
+            <a href="sop-b738.html" class="card card-link"><div class="cp-sm"><div class="tr mono">B738</div><div style="font-size:.8rem;color:var(--m)">737-800 SOP</div></div></a>
+            <a href="sop-a21n.html" class="card card-link"><div class="cp-sm"><div class="tr mono">A21N</div><div style="font-size:.8rem;color:var(--m)">A321XLR SOP</div></div></a>
+            <a href="sop-a330.html" class="card card-link"><div class="cp-sm"><div class="tr mono">A332/33</div><div style="font-size:.8rem;color:var(--m)">A330 SOP</div></div></a>
+            <a href="sop-b789.html" class="card card-link"><div class="cp-sm"><div class="tr mono">B789</div><div style="font-size:.8rem;color:var(--m)">787-9 SOP</div></div></a>
+            <a href="sop-a388.html" class="card card-link"><div class="cp-sm"><div class="tr mono">A388</div><div style="font-size:.8rem;color:var(--m)">A380 SOP</div></div></a>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  // Set moodle link
+  const ml = document.getElementById('moodle-link');
+  if(ml) ml.href = DB.settings().moodle_url;
+}
+
+function switchDashTab(name, btn) {
+  document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.dash-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('dpane-'+name)?.classList.add('active');
+}
+
+function delFlight(id) {
+  if(!confirm('Delete this flight?')) return;
+  DB.removeFlight(id);
+  refreshDashboard();
+  UI.toast('Flight removed.','error');
+}
+
+function exportFlights() {
+  const pilot = Auth.pilot;
+  const all = pilot ? DB.flightsFor(pilot.id) : [];
+  if(!all.length){ UI.toast('No flights to export.','error'); return; }
+  const rows = [['Date','Flight','Dep','Arr','Aircraft','Block','Network','Notes']];
+  all.forEach(f=>rows.push([f.date,f.fn,f.dep,f.arr,f.ac,f.block,f.network||'VATSIM',f.notes||'']));
+  const csv = rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = 'QFV_Flights_' + (today()) + '.csv';
+  a.click();
+  UI.toast('CSV exported!');
+}
+
+function showEditProfile() {
+  const sess = Auth.session;
+  const newSb = prompt('Enter your SimBrief username:', sess?.simbrief||'');
+  if(newSb === null) return;
+  if(sess) {
+    const s = Auth.session;
+    s.simbrief = newSb.trim();
+    Auth.session = s;
+    if(s.pilotId) DB.updatePilot(s.pilotId, { simbrief: newSb.trim() });
+    UI.toast('SimBrief username updated!');
+    refreshDashboard();
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  if(Auth.logged) refreshDashboard();
+  else document.getElementById('dash-root').innerHTML = `
+    <div style="padding:80px 48px;text-align:center">
+      <div style="font-family:var(--fd);font-size:3rem;color:var(--r);margin-bottom:12px">PILOT DASHBOARD</div>
+      <p style="color:var(--m);margin-bottom:20px">Log in with your VATSIM CID to access your dashboard.</p>
+      <button class="btn btn-r" onclick="UI.modal('login-modal')">LOG IN</button>
+    </div>`;
+});
+</script>
+
+</body></html>

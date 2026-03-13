@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Pilot Roster — Qantas Virtual QFV</title>
+<meta name="description" content="QFV — Independent virtual airline on VATSIM. ICAO QFV."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="nav-slot"></div>
+<div id="modals-slot"></div>
+<div id="cookie-slot"></div>
+<main class="page">
+
+<section style="padding:72px 48px 44px;background:var(--k2);border-bottom:1px solid rgba(200,16,46,.15);position:relative;overflow:hidden">
+  <div class="hero-grid"></div>
+  <div class="s-eye">VAP Compliance</div>
+  <h1 style="font-family:var(--fd);font-size:clamp(2.5rem,7vw,5.5rem);line-height:.9;letter-spacing:1px;margin-bottom:8px">PILOT <span style="color:var(--r)">ROSTER</span></h1>
+  <p style="font-size:.9rem;color:var(--m);max-width:480px;line-height:1.75">Public roster — accessible without login per VATSIM VAP requirements.</p>
+</section>
+<section class="sec sec-k">
+  <div class="g4 mb24" id="roster-stats"></div>
+  <div class="s-eye">Active Pilots</div>
+  <h3 style="font-family:var(--fd);font-size:1.8rem;letter-spacing:1px;margin-bottom:14px">Pilot Register</h3>
+  <div class="tw"><table class="tbl" id="roster-table">
+    <thead><tr><th>Pilot ID</th><th>Name</th><th>VATSIM CID</th><th>Rating</th><th>Rank</th><th>Division</th><th>Hours</th><th>Status</th></tr></thead>
+    <tbody id="roster-body"></tbody>
+  </table></div>
+  <div style="margin-top:40px">
+    <div class="s-eye">Recent Flights</div>
+    <h3 style="font-family:var(--fd);font-size:1.8rem;letter-spacing:1px;margin-bottom:14px">Flight Log</h3>
+    <div class="tw"><table class="tbl"><thead><tr><th>Date</th><th>Flight</th><th>Pilot</th><th>Origin</th><th>Destination</th><th>Aircraft</th><th>Block</th></tr></thead>
+    <tbody id="pub-flights-body"></tbody></table></div>
+  </div>
+  <div style="margin-top:40px">
+    <div class="s-eye">Callsign Registry</div>
+    <h3 style="font-family:var(--fd);font-size:1.8rem;letter-spacing:1px;margin-bottom:12px">ICAO Prefixes</h3>
+    <div class="tw"><table class="tbl"><thead><tr><th>Prefix</th><th>Division</th><th>Example</th><th>Notes</th></tr></thead><tbody>
+      <tr><td class="tr">QFV</td><td>Civilian</td><td class="mono tm">QFV401</td><td class="tm">Primary callsign — all commercial routes</td></tr>
+      <tr><td class="tr">QFVM</td><td>Military</td><td class="mono tm">QFVM01</td><td class="tm">Military division operations</td></tr>
+      <tr><td class="tr">QFV9</td><td>Charter</td><td class="mono tm">QFV901</td><td class="tm">Charter, training and special flights</td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+</main>
+<div id="footer-slot"></div>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="ui.js"></script>
+<script>window.addEventListener('DOMContentLoaded',()=>UI.init('roster.html'));</script>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const pilots = DB.pilots().filter(p=>p.status==='active');
+  const flights = DB.flights();
+  const r90 = DB.recentFlights(90);
+  const ns = DB.networkStats();
+
+  document.getElementById('roster-stats').innerHTML = `
+    <div class="card"><div class="cp tc"><div class="st-n">${pilots.length}</div><div class="st-l">Active Pilots</div></div></div>
+    <div class="card"><div class="cp tc"><div class="st-n">${r90.length}</div><div class="st-l">Flights (90d)</div></div></div>
+    <div class="card"><div class="cp tc"><div class="st-n">${ns.hours}h</div><div class="st-l">Total Hours</div></div></div>
+    <div class="card"><div class="cp tc"><div class="st-n">QFV</div><div class="st-l">ICAO Prefix</div></div></div>
+  `;
+
+  document.getElementById('roster-body').innerHTML = pilots.map(p => {
+    const s = DB.pilotStats(p.id);
+    return `<tr>
+      <td class="tr">${p.id}</td>
+      <td style="font-weight:600">${p.name}</td>
+      <td class="mono tm" style="font-size:.74rem">${p.cid||'—'}</td>
+      <td class="tg">${p.rating||'—'}</td>
+      <td>${p.rank||'—'}</td>
+      <td class="tm">${(p.div||'civilian').charAt(0).toUpperCase()+(p.div||'civilian').slice(1)}</td>
+      <td class="tr">${s.hours}h ${s.mins}m</td>
+      <td><span class="badge badge-go">ACTIVE</span></td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('pub-flights-body').innerHTML = flights.slice(0,15).map(f=>`
+    <tr>
+      <td class="mono tm" style="font-size:.74rem">${f.date}</td>
+      <td class="tr">${f.fn}</td>
+      <td class="cm">${f.pilotName||f.pilotId}</td>
+      <td style="font-weight:700">${f.dep}</td>
+      <td style="font-weight:700">${f.arr}</td>
+      <td class="tg">${f.ac}</td>
+      <td class="cm">${f.block}</td>
+    </tr>`).join('');
+});
+</script>
+
+</body></html>

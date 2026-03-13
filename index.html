@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Home — Qantas Virtual QFV</title>
+<meta name="description" content="QFV — Independent virtual airline on VATSIM. ICAO QFV."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="nav-slot"></div>
+<div id="modals-slot"></div>
+<div id="cookie-slot"></div>
+<main class="page">
+
+<section class="hero">
+  <div class="hero-grid"></div><div class="hero-glow"></div>
+  <div class="hero-num">QFV</div>
+  <div class="hero-content">
+    <div class="h-eye" data-aos>Independent Virtual Airline · VATSIM Community · Est. 2025</div>
+    <h1 class="h-title" data-aos data-delay="100">
+      <span class="ht1">QANTAS</span>
+      <span class="ht2">VIRTUAL</span>
+      <span class="ht3">QFV</span>
+    </h1>
+    <p class="h-sub" data-aos data-delay="200">An independent virtual airline built around realism, community, and progression. Three divisions — Civilian, Military, and ATC — flying real routes with real procedures on VATSIM.</p>
+    <div class="h-pills" data-aos data-delay="240">
+      <span class="pill pr">VATSIM VAA</span><span class="pill pr">ICAO QFV</span>
+      <span class="pill pa">5 Aircraft</span><span class="pill pa">30+ Routes</span>
+      <span class="pill pg">Military Wing</span><span class="pill pd">SimBrief Mandatory</span>
+    </div>
+    <div class="h-btns" data-aos data-delay="280">
+      <a href="join.html" class="btn btn-r">Join the Airline</a>
+      <button class="btn btn-a" onclick="openLogModal()">Log a Flight</button>
+      <a href="dashboard.html" class="btn btn-o">Pilot Dashboard</a>
+    </div>
+  </div>
+</section>
+<div class="statsbar" id="network-stats">
+  <div class="st"><div class="st-n" id="stat-pilots">—</div><div class="st-l">Active Pilots</div></div>
+  <div class="st"><div class="st-n" id="stat-flights">—</div><div class="st-l">Total Flights</div></div>
+  <div class="st"><div class="st-n" id="stat-hours">—</div><div class="st-l">Hours Flown</div></div>
+  <div class="st"><div class="st-n">5</div><div class="st-l">Aircraft Types</div></div>
+  <div class="st"><div class="st-n">VAA</div><div class="st-l">VATSIM Status</div></div>
+</div>
+<section class="sec sec-k2" id="announcements-section" style="display:none">
+  <div class="s-eye">Announcements</div>
+  <div id="announcements-list"></div>
+</section>
+<section class="sec sec-k2">
+  <div class="s-eye">Required on Every Flight</div>
+  <h2 class="s-title">Mandatory Tools</h2>
+  <div class="s-rule"></div>
+  <div class="g2" data-aos>
+    <div class="card"><div class="cp">
+      <div style="font-size:2rem;margin-bottom:10px">🗺️</div>
+      <div style="font-family:var(--fd);font-size:1.55rem;letter-spacing:1px;margin-bottom:4px">SIMBRIEF</div>
+      <div style="font-family:var(--fm);font-size:.56rem;color:var(--r);margin-bottom:11px">simbrief.com — FLIGHT PLANNING</div>
+      <p style="font-size:.88rem;color:var(--m);line-height:1.75;margin-bottom:12px">Generate a full OFP before every departure. Routing, fuel, weather, NOTAMs, W&B. The website can fetch your latest OFP automatically — just enter your SimBrief username in your profile.</p>
+      <div class="alert ar mb16"><span class="a-icon">⚠</span><div class="a-body"><strong>Mandatory.</strong> No SimBrief OFP = flight does not count toward hours or rank.</div></div>
+      <a href="https://www.simbrief.com" target="_blank" class="btn btn-r btn-sm">Open SimBrief ↗</a>
+    </div></div>
+    <div class="card card-a"><div class="cp">
+      <div style="font-size:2rem;margin-bottom:10px">📋</div>
+      <div style="font-family:var(--fd);font-size:1.55rem;letter-spacing:1px;margin-bottom:4px">FLIGHT LOGGER</div>
+      <div style="font-family:var(--fm);font-size:.56rem;color:var(--ac);margin-bottom:11px">QFV Website — FLIGHT LOGGING</div>
+      <p style="font-size:.88rem;color:var(--m);line-height:1.75;margin-bottom:12px">Log every completed flight via the Pilot Dashboard. Your SimBrief OFP can be fetched automatically to pre-fill the form. Submit within 48 hours of landing.</p>
+      <div class="alert aa mb16"><span class="a-icon">⚠</span><div class="a-body"><strong>Mandatory.</strong> Unlogged flights do not count. No manual retroactive submissions.</div></div>
+      <button class="btn btn-a btn-sm" onclick="openLogModal()">Log a Flight →</button>
+    </div></div>
+  </div>
+</section>
+<section class="sec sec-k">
+  <div class="s-eye">Our Divisions</div>
+  <h2 class="s-title">Three Wings</h2>
+  <div class="s-rule"></div>
+  <div class="g3" data-aos>
+    <div class="card"><div class="cp">
+      <div style="font-family:var(--fd);font-size:2.8rem;color:var(--r);line-height:1;margin-bottom:10px">✈</div>
+      <div style="font-family:var(--fd);font-size:1.3rem;letter-spacing:1px;margin-bottom:7px">CIVILIAN</div>
+      <p style="font-size:.87rem;color:var(--m);line-height:1.7;margin-bottom:13px">Commercial routes from domestic B737-800 hops to A380 ultra-long-haul. Full SOPs, SimBrief-planned, VATSIM-flown.</p>
+      <a href="training.html" class="btn btn-o btn-sm">Pilot Training →</a>
+    </div></div>
+    <div class="card card-gold"><div class="cp">
+      <div style="font-family:var(--fd);font-size:2.8rem;color:var(--au);line-height:1;margin-bottom:10px">⚔</div>
+      <div style="font-family:var(--fd);font-size:1.3rem;letter-spacing:1px;margin-bottom:7px">MILITARY</div>
+      <p style="font-size:.87rem;color:var(--m);line-height:1.7;margin-bottom:13px">Special ops, tactical transport, maritime patrol and exercise events. M1–M4 ratings. Restricted — P2 + 10 hours to apply.</p>
+      <a href="military.html" class="btn btn-gold btn-sm">Military Wing →</a>
+    </div></div>
+    <div class="card card-a"><div class="cp">
+      <div style="font-family:var(--fd);font-size:2.8rem;color:var(--ac);line-height:1;margin-bottom:10px">📡</div>
+      <div style="font-family:var(--fd);font-size:1.3rem;letter-spacing:1px;margin-bottom:7px">ATC TRAINING</div>
+      <p style="font-size:.87rem;color:var(--m);line-height:1.7;margin-bottom:13px">Study for VATSIM ATC ratings S1–C3. Full curriculum aligned with VATPAC exams. QFV does not issue ATC ratings.</p>
+      <a href="atc.html" class="btn btn-a btn-sm">ATC Training →</a>
+    </div></div>
+  </div>
+</section>
+<section class="sec sec-p">
+  <div class="s-eye">Fleet</div>
+  <h2 class="s-title">Five Aircraft</h2>
+  <div class="s-rule"></div>
+  <div class="ga" data-aos>
+    <a href="sop-b738.html" class="card card-link"><div class="cp"><div class="mono cr" style="font-size:1.4rem;margin-bottom:5px">B738</div><div style="font-family:var(--fd);font-size:1rem;margin-bottom:3px">Boeing 737-800</div><div style="font-size:.8rem;color:var(--m)">Domestic · M0.785 · Rank R1</div><div style="font-size:.72rem;color:var(--ac);margin-top:6px">View SOP →</div></div></a>
+    <a href="sop-a21n.html" class="card card-link"><div class="cp"><div class="mono cr" style="font-size:1.4rem;margin-bottom:5px">A21N</div><div style="font-family:var(--fd);font-size:1rem;margin-bottom:3px">Airbus A321XLR</div><div style="font-size:.8rem;color:var(--m)">Domestic+Intl · M0.79 · Rank R2</div><div style="font-size:.72rem;color:var(--ac);margin-top:6px">View SOP →</div></div></a>
+    <a href="sop-a330.html" class="card card-link"><div class="cp"><div class="mono cr" style="font-size:1.4rem;margin-bottom:5px">A332/33</div><div style="font-family:var(--fd);font-size:1rem;margin-bottom:3px">Airbus A330</div><div style="font-size:.8rem;color:var(--m)">International · M0.82 · Rank R3</div><div style="font-size:.72rem;color:var(--ac);margin-top:6px">View SOP →</div></div></a>
+    <a href="sop-b789.html" class="card card-link"><div class="cp"><div class="mono cr" style="font-size:1.4rem;margin-bottom:5px">B789</div><div style="font-family:var(--fd);font-size:1rem;margin-bottom:3px">Boeing 787-9</div><div style="font-size:.8rem;color:var(--m)">Long-Haul · M0.85 · Rank R4</div><div style="font-size:.72rem;color:var(--ac);margin-top:6px">View SOP →</div></div></a>
+    <a href="sop-a388.html" class="card card-link"><div class="cp"><div class="mono cr" style="font-size:1.4rem;margin-bottom:5px">A388</div><div style="font-family:var(--fd);font-size:1rem;margin-bottom:3px">Airbus A380-800</div><div style="font-size:.8rem;color:var(--m)">Flagship · M0.85 · R5+Endorse</div><div style="font-size:.72rem;color:var(--ac);margin-top:6px">View SOP →</div></div></a>
+  </div>
+</section>
+<section class="sec sec-red sec-center" style="position:relative">
+  <div class="hero-grid" style="position:absolute;inset:0"></div>
+  <div style="position:relative;max-width:540px;margin:0 auto">
+    <div class="s-eye" style="justify-content:center">Ready?</div>
+    <h2 class="s-title" style="font-size:clamp(3rem,8vw,6rem)">JOIN QFV</h2>
+    <p style="font-size:.95rem;color:var(--m);line-height:1.8;margin:12px auto 26px;max-width:400px">VATSIM account + simulator + SimBrief. That's all you need.</p>
+    <div class="h-btns" style="justify-content:center">
+      <a href="join.html" class="btn btn-r">Apply Now</a>
+      <a href="https://vatsim.net/register" target="_blank" class="btn btn-o">Get VATSIM ↗</a>
+    </div>
+  </div>
+</section>
+</main>
+<div id="footer-slot"></div>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="ui.js"></script>
+<script>window.addEventListener('DOMContentLoaded',()=>UI.init('index.html'));</script>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  // Live stats
+  const p = DB.pilots();
+  const ns = DB.networkStats();
+  document.getElementById('stat-pilots').textContent  = p.filter(x=>x.status==='active').length;
+  document.getElementById('stat-flights').textContent = ns.total;
+  document.getElementById('stat-hours').textContent   = ns.hours + 'h';
+  // Announcements
+  const ann = DB.announcements();
+  if(ann.length) {
+    document.getElementById('announcements-section').style.display = 'block';
+    document.getElementById('announcements-list').innerHTML = ann.map(a => `
+      <div class="alert ao mb8">
+        <span class="a-icon">📣</span>
+        <div class="a-body">
+          <strong>${a.title}</strong><br>${a.body}
+          <span style="font-family:var(--fm);font-size:.6rem;color:var(--m);margin-left:10px">${a.date}</span>
+        </div>
+      </div>`).join('');
+  }
+});
+</script>
+
+</body></html>

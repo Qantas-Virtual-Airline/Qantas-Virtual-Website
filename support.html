@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Support — Qantas Virtual QFV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
+<style>
+.ticket-card{background:var(--p);border:1px solid rgba(255,255,255,.07);border-left:4px solid var(--r);margin-bottom:5px;transition:border-color .2s}
+.ticket-card:hover{border-color:rgba(200,16,46,.5)}
+.ticket-card.status-replied{border-left-color:var(--go)}
+.ticket-card.status-waiting{border-left-color:var(--au)}
+.ticket-card.status-closed{border-left-color:var(--m3);opacity:.7}
+.tcard-head{padding:13px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tcard-num{font-family:var(--fm);font-size:.62rem;color:var(--r);min-width:50px;flex-shrink:0}
+.tcard-subj{font-weight:600;font-size:.88rem;flex:1}
+.tcard-meta{font-family:var(--fm);font-size:.58rem;color:var(--m);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tstat{font-family:var(--fm);font-size:.54rem;letter-spacing:1px;padding:2px 7px;border:1px solid;text-transform:uppercase}
+.ts-open{border-color:var(--r);color:var(--r);background:rgba(200,16,46,.08)}
+.ts-replied{border-color:var(--go);color:var(--go);background:rgba(0,230,118,.07)}
+.ts-waiting{border-color:var(--au);color:var(--au);background:rgba(255,179,0,.07)}
+.ts-closed{border-color:var(--m2);color:var(--m)}
+.tcard-body{display:none;padding:0 16px 14px}
+.tcard-body.open{display:block}
+.tmsg{margin-top:8px;padding:11px 14px;background:var(--k3);border:1px solid rgba(255,255,255,.07);border-left:3px solid var(--m3)}
+.tmsg.staff{border-left-color:var(--ac);background:rgba(0,188,212,.05)}
+.tmsg-from{font-family:var(--fm);font-size:.56rem;color:var(--m);margin-bottom:4px;display:flex;gap:8px}
+.tmsg-from .fn{color:var(--ac)}
+.tmsg-from .fn.st{color:var(--au)}
+.tmsg-body{font-size:.86rem;line-height:1.65;white-space:pre-wrap}
+.reply-box{margin-top:12px;border-top:1px solid rgba(255,255,255,.07);padding-top:12px}
+.contact-box{background:var(--p);border:1px solid rgba(200,16,46,.2);padding:18px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.contact-role{font-family:var(--fd);font-size:1.15rem;letter-spacing:1px}
+.contact-desc{font-size:.8rem;color:var(--m);margin-top:2px;max-width:320px}
+.email-btn{font-family:var(--fm);font-size:.68rem;letter-spacing:1px;color:var(--r);border:1px solid rgba(200,16,46,.35);padding:7px 14px;white-space:nowrap;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.email-btn:hover{background:var(--r);color:#fff}
+.sup-tabs{display:flex;gap:0;border-bottom:1px solid var(--m3);margin-bottom:22px}
+.sup-tab{font-family:var(--fb);font-weight:600;font-size:.78rem;padding:10px 20px;cursor:pointer;color:var(--m);border:none;background:none;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
+.sup-tab.active,.sup-tab:hover{color:var(--w)}
+.sup-tab.active{color:var(--r);border-bottom-color:var(--r)}
+.sup-pane{display:none}.sup-pane.active{display:block}
+#dt-bar{display:none;border-bottom:1px solid rgba(255,179,0,.35);background:rgba(255,179,0,.06);padding:10px 32px;font-size:.82rem;display:flex;align-items:center;gap:10px}
+#dt-bar.live{border-color:rgba(200,16,46,.5);background:rgba(200,16,46,.09)}
+</style>
+</head>
+<body>
+<div id="nav-slot"></div>
+<div id="modals-slot"></div>
+<div id="cookie-slot"></div>
+
+<div id="dt-bar" style="display:none">
+  <span id="dt-icon">🟡</span>
+  <span id="dt-msg" style="flex:1"></span>
+  <span id="dt-cd" class="mono" style="font-size:.7rem;color:var(--au)"></span>
+</div>
+
+<main class="page">
+
+<section class="hero" style="min-height:44vh">
+  <div class="hero-grid"></div><div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="h-eye">Help Centre</div>
+    <h1 class="h-title"><span class="ht1">SUPPORT</span></h1>
+    <p class="h-sub">Submit a support ticket and track staff replies right here. Logged-in pilots see full ticket history and direct email access.</p>
+    <div class="h-btns mt16" id="hero-btns"></div>
+  </div>
+</section>
+
+<section class="sec sec-k2">
+  <div class="sup-tabs" id="sup-tabs">
+    <button class="sup-tab active" onclick="sTab('new',this)">New Ticket</button>
+    <button class="sup-tab" id="stab-mine" onclick="sTab('mine',this)">My Tickets</button>
+    <button class="sup-tab" id="stab-direct" style="display:none" onclick="sTab('direct',this)">Direct Email</button>
+    <button class="sup-tab" id="stab-all" style="display:none" onclick="sTab('all',this)">All Tickets <span id="ocount" style="color:var(--r)"></span></button>
+    <button class="sup-tab" onclick="sTab('faq',this)">FAQ</button>
+  </div>
+
+  <!-- ═══ NEW TICKET ═══ -->
+  <div class="sup-pane active" id="pane-new">
+    <div class="g2" style="gap:28px;align-items:start">
+      <div>
+        <div class="s-eye">Submit</div>
+        <h2 class="s-title">New Support Ticket</h2>
+        <div class="s-rule"></div>
+        <div id="t-loginhint" style="display:none" class="alert aa mb16">
+          <span class="a-icon">ℹ</span>
+          <div class="a-body"><strong>Log in to track replies.</strong> You can still submit as a guest but won't see staff responses without logging in.
+          <button class="btn btn-a btn-sm" style="margin-top:7px" onclick="UI.modal('login-modal')">Log In</button></div>
+        </div>
+        <div id="t-ok" style="display:none" class="alert ag mb16">
+          <span class="a-icon">✓</span>
+          <div class="a-body"><strong>Ticket submitted!</strong> Your ticket is <strong id="t-oknum"></strong>. Staff respond within 48 hours.
+          <span id="t-oklink"></span></div>
+        </div>
+        <form class="form" id="tform" onsubmit="doSubmitTicket(event)">
+          <div class="frow">
+            <div class="fld"><label class="flbl">Your Name / Callsign</label><input class="finp" id="tf-name" placeholder="John / QFV005" required/></div>
+            <div class="fld"><label class="flbl">VATSIM CID</label><input class="finp" id="tf-cid" placeholder="1234567"/></div>
+          </div>
+          <div class="fld"><label class="flbl">Category</label>
+            <select class="fsel" id="tf-cat">
+              <option>General Enquiry</option><option>Training &amp; Ratings</option>
+              <option>Hours / Rank Dispute</option><option>Military Division Application</option>
+              <option>ATC Training</option><option>Appeal a Decision</option>
+              <option>Complaint / Report</option><option>Technical / Website Issue</option>
+              <option>Partnership Proposal</option><option>GDPR / Data Request</option><option>Other</option>
+            </select>
+          </div>
+          <div class="fld"><label class="flbl">Subject</label><input class="finp" id="tf-subj" placeholder="Brief description" required/></div>
+          <div class="fld"><label class="flbl">Message</label>
+            <textarea class="ftxt" id="tf-msg" rows="5" placeholder="Describe your issue in detail. Include flight numbers, dates, Pilot ID..." required></textarea>
+          </div>
+          <div class="fld"><label class="flbl">Priority</label>
+            <select class="fsel" id="tf-pri">
+              <option value="normal">Normal</option>
+              <option value="high">High — time sensitive</option>
+              <option value="low">Low — no rush</option>
+            </select>
+          </div>
+          <div class="ferr" id="tf-err"></div>
+          <button type="submit" class="btn btn-r btn-full">Submit Ticket →</button>
+          <p style="font-size:.7rem;color:var(--m2);margin-top:5px">Tickets stored in your browser. For urgent issues, use Direct Email (login required) or Discord.</p>
+        </form>
+      </div>
+      <div>
+        <div class="s-eye">Response Times</div>
+        <h3 style="font-family:var(--fd);font-size:1.5rem;letter-spacing:1px;margin-bottom:11px">What to Expect</h3>
+        <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:20px">
+          <div class="card"><div class="cp-sm" style="display:flex;justify-content:space-between"><span style="font-size:.85rem">Normal tickets</span><span class="mono" style="font-size:.68rem;color:var(--go)">within 48h</span></div></div>
+          <div class="card"><div class="cp-sm" style="display:flex;justify-content:space-between"><span style="font-size:.85rem">High priority</span><span class="mono" style="font-size:.68rem;color:var(--au)">within 24h</span></div></div>
+          <div class="card"><div class="cp-sm" style="display:flex;justify-content:space-between"><span style="font-size:.85rem">Appeals</span><span class="mono" style="font-size:.68rem;color:var(--r)">within 7 days</span></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:20px">
+          <div style="font-family:var(--fm);font-size:.56rem;color:var(--m);letter-spacing:2px;margin-bottom:6px">TICKET STATUS</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:.83rem"><span class="tstat ts-open">OPEN</span><span style="color:var(--m)">Awaiting staff</span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:.83rem"><span class="tstat ts-replied">REPLIED</span><span style="color:var(--m)">Staff responded</span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:.83rem"><span class="tstat ts-waiting">WAITING</span><span style="color:var(--m)">Awaiting your reply</span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:.83rem"><span class="tstat ts-closed">CLOSED</span><span style="color:var(--m)">Resolved</span></div>
+        </div>
+        <div class="alert ao"><span class="a-icon">⚡</span>
+          <div class="a-body"><strong>Fastest:</strong> Post in <span style="font-family:var(--fm);color:var(--ac)">#staff-contact</span> on Discord.
+          <a href="#" id="disc-link" class="btn btn-a btn-sm" style="display:block;margin-top:8px;clip-path:none" target="_blank">Open Discord →</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MY TICKETS ═══ -->
+  <div class="sup-pane" id="pane-mine">
+    <div id="mine-content"></div>
+  </div>
+
+  <!-- ═══ DIRECT EMAIL (logged-in only) ═══ -->
+  <div class="sup-pane" id="pane-direct">
+    <div class="s-eye">Direct Contact</div>
+    <h2 class="s-title">Email Staff Directly</h2>
+    <div class="s-rule"></div>
+    <div class="alert aa mb20"><span class="a-icon">🔒</span>
+      <div class="a-body">Visible to logged-in members only. Clicking a button opens your email client with the correct address pre-filled — addresses are not shown in page source.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <div class="contact-box">
+        <div><div class="contact-role cr">President</div>
+        <div class="contact-desc">Appeals, serious complaints, partnership proposals, VATSIM relations.</div></div>
+        <a href="#" id="eml-p" class="email-btn">✉ Email President</a>
+      </div>
+      <div class="contact-box" style="border-color:rgba(0,188,212,.2)">
+        <div><div class="contact-role ca">Vice President</div>
+        <div class="contact-desc">General enquiries, training, rank disputes, recruitment, tech issues.</div></div>
+        <a href="#" id="eml-v" class="email-btn" style="color:var(--ac);border-color:rgba(0,188,212,.35)">✉ Email Vice President</a>
+      </div>
+      <div class="contact-box" style="border-color:rgba(255,179,0,.2)">
+        <div><div class="contact-role co">Both Staff</div>
+        <div class="contact-desc">Critical issues requiring immediate attention from all leadership.</div></div>
+        <a href="#" id="eml-b" class="email-btn" style="color:var(--au);border-color:rgba(255,179,0,.35)">✉ Email Both</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ADMIN — ALL TICKETS ═══ -->
+  <div class="sup-pane" id="pane-all">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div><div class="s-eye">Staff View</div><h2 class="s-title" style="margin-bottom:0">All Tickets</h2></div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <button class="btn btn-o btn-sm" onclick="renderAll('all')">All</button>
+        <button class="btn btn-r btn-sm" onclick="renderAll('open')">Open</button>
+        <button class="btn btn-gold btn-sm" onclick="renderAll('replied')">Replied</button>
+        <button class="btn btn-a btn-sm" onclick="renderAll('waiting')">Waiting</button>
+        <button class="btn btn-o btn-sm" onclick="renderAll('closed')">Closed</button>
+      </div>
+    </div>
+    <div id="all-content"></div>
+  </div>
+
+  <!-- ═══ FAQ ═══ -->
+  <div class="sup-pane" id="pane-faq">
+    <div class="s-eye">Frequently Asked Questions</div>
+    <h2 class="s-title">Common Questions</h2>
+    <div class="s-rule"></div>
+    <div class="acc">
+      <div class="acc-item"><div class="acc-head" aria-expanded="false"><div class="acc-ht">How do I join QFV?</div><span class="acc-tog">+</span></div>
+      <div class="acc-body"><p style="font-size:.87rem;color:var(--m);line-height:1.7">Fill in the <a href="join.html" style="color:var(--r)">application form</a>. Staff review within 48 hours. Have VATSIM, SimBrief, and a simulator ready before applying.</p></div></div>
+
+      <div class="acc-item"><div class="acc-head" aria-expanded="false"><div class="acc-ht">My flight hours are wrong or missing.</div><span class="acc-tog">+</span></div>
+      <div class="acc-body"><p style="font-size:.87rem;color:var(--m);line-height:1.7">Submit a ticket selecting "Hours / Rank Dispute". Include your Pilot ID, the flight date, flight number, and block time. SimBrief OFP reference helps if you have it.</p></div></div>
+
+      <div class="acc-item"><div class="acc-head" aria-expanded="false"><div class="acc-ht">How do I apply for the Military Division?</div><span class="acc-tog">+</span></div>
+      <div class="acc-body"><p style="font-size:.87rem;color:var(--m);line-height:1.7">P2 (Instrument Rating) + 10 logged QFV civilian hours required. Submit a "Military Division Application" ticket with your Pilot ID, current rating, and total hours.</p></div></div>
+
+      <div class="acc-item"><div class="acc-head" aria-expanded="false"><div class="acc-ht">How do I appeal a decision?</div><span class="acc-tog">+</span></div>
+      <div class="acc-body"><p style="font-size:.87rem;color:var(--m);line-height:1.7">Submit an "Appeal a Decision" ticket within 7 days of the decision. Include the original decision details and grounds for appeal. The President reviews all appeals personally.</p></div></div>
+
+      <div class="acc-item"><div class="acc-head" aria-expanded="false"><div class="acc-ht">SimBrief isn't loading into the flight log form.</div><span class="acc-tog">+</span></div>
+      <div class="acc-body"><p style="font-size:.87rem;color:var(--m);line-height:1.7">Ensure your SimBrief username is saved in your Dashboard profile. OFPs expire after 24h — generate a fresh one and retry. If still broken, log manually and submit a Technical ticket.</p></div></div>
+
+      <div class="acc-item"><div class="acc-head" aria-expanded="false"><div class="acc-ht">GDPR — how do I request or delete my data?</div><span class="acc-tog">+</span></div>
+      <div class="acc-body"><p style="font-size:.87rem;color:var(--m);line-height:1.7">All QFV site data is in your own browser localStorage — clear it via browser DevTools → Application → Local Storage. For Discord/server-side data, submit a "GDPR / Data Request" ticket. See our <a href="privacy.html" style="color:var(--r)">Privacy Policy</a>.</p></div></div>
+    </div>
+  </div>
+</section>
+
+</main>
+<div id="footer-slot"></div>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="ui.js"></script>
+<script>window.addEventListener('DOMContentLoaded',()=>UI.init('support.html'));</script>
+<script>
+// ── CONTACTS (runtime-decoded, not plain in source) ──────────────
+const EC = { p: atob('c291dGhlZXdlc3R5MTIzQGdtYWlsLmNvbQ=='), v: atob('U2ZsZWlzaG1hbkBkYXZpbmZvcmdlLmNvbQ==') };
+
+// ── TAB SWITCH ───────────────────────────────────────────────────
+function sTab(name, btn) {
+  document.querySelectorAll('.sup-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sup-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pane-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(name==='mine') renderMine();
+  if(name==='all')  renderAll('open');
+}
+
+// ── DOWNTIME BANNER ──────────────────────────────────────────────
+function initDT() {
+  const dt = checkDowntime();
+  if(!dt) return;
+  const bar = document.getElementById('dt-bar');
+  const msg = document.getElementById('dt-msg');
+  const cd  = document.getElementById('dt-cd');
+  const ico = document.getElementById('dt-icon');
+  bar.style.display = 'flex';
+  const s = DB.settings();
+  if(dt.active) {
+    bar.classList.add('live');
+    ico.textContent  = '🔴';
+    msg.textContent  = 'MAINTENANCE IN PROGRESS — ' + (s.downtime_reason||'');
+    msg.style.color  = 'var(--r)';
+    function tickEnd() {
+      const rem = new Date(dt.end).getTime()-Date.now();
+      if(rem<=0){cd.textContent='Ending shortly...';return;}
+      const h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000),sc=Math.floor((rem%60000)/1000);
+      cd.textContent='Ends in '+h+'h '+m+'m '+sc+'s';
+    }
+    tickEnd(); setInterval(tickEnd,1000);
+  } else {
+    ico.textContent = '🟡';
+    msg.textContent = 'SCHEDULED MAINTENANCE: '+(s.downtime_reason||'')+' — '+fmtDateTime(dt.start)+' to '+fmtDateTime(dt.end);
+    msg.style.color = 'var(--au)';
+    function tickStart() {
+      const rem = new Date(dt.start).getTime()-Date.now();
+      if(rem<=0){cd.textContent='Starting now...';return;}
+      const d=Math.floor(rem/86400000),h=Math.floor((rem%86400000)/3600000),m=Math.floor((rem%3600000)/60000),sc=Math.floor((rem%60000)/1000);
+      cd.textContent='Starts in '+(d>0?d+'d ':'')+h+'h '+m+'m '+sc+'s';
+    }
+    tickStart(); setInterval(tickStart,1000);
+  }
+}
+
+// ── SUBMIT ───────────────────────────────────────────────────────
+function doSubmitTicket(e) {
+  e.preventDefault();
+  const name=document.getElementById('tf-name').value.trim();
+  const cid =document.getElementById('tf-cid').value.trim()||Auth.session?.cid||'';
+  const cat =document.getElementById('tf-cat').value;
+  const subj=document.getElementById('tf-subj').value.trim();
+  const msg =document.getElementById('tf-msg').value.trim();
+  const pri =document.getElementById('tf-pri').value;
+  const err =document.getElementById('tf-err');
+  if(!name||!subj||!msg){err.textContent='Please fill all required fields.';err.style.display='block';return;}
+  const t = DB.submitTicket({name,cid,cat,subject:subj,message:msg,priority:pri,pilotId:Auth.session?.pilotId||null});
+  document.getElementById('tform').style.display='none';
+  document.getElementById('t-oknum').textContent='#'+t.num;
+  if(Auth.logged) document.getElementById('t-oklink').innerHTML='<a href="#" style="color:var(--ac)" onclick="sTab(\'mine\',document.getElementById(\'stab-mine\'))">View in My Tickets →</a>';
+  document.getElementById('t-ok').style.display='flex';
+  err.style.display='none';
+  updateBadge();
+  UI.toast('Ticket #'+t.num+' submitted!');
+}
+
+// ── RENDER MY TICKETS ────────────────────────────────────────────
+function renderMine() {
+  const el=document.getElementById('mine-content');
+  if(!Auth.logged){
+    el.innerHTML='<div style="text-align:center;padding:40px;color:var(--m)"><div style="font-family:var(--fd);font-size:1.8rem;color:var(--r);margin-bottom:10px">LOG IN TO VIEW TICKETS</div><p style="margin-bottom:14px">Log in with your VATSIM CID to track your support tickets.</p><button class="btn btn-r" onclick="UI.modal(\'login-modal\')">Log In</button></div>';
+    return;
+  }
+  const all=DB.ticketsFor(Auth.session.cid);
+  if(!all.length){
+    el.innerHTML='<div style="text-align:center;padding:36px;border:1px dashed rgba(255,255,255,.1)"><div style="font-family:var(--fd);font-size:1.6rem;color:var(--m);margin-bottom:8px">NO TICKETS YET</div><p style="color:var(--m2);margin-bottom:12px;font-size:.88rem">Submit one using the New Ticket tab.</p><button class="btn btn-r btn-sm" onclick="sTab(\'new\',document.querySelector(\'.sup-tab\'))">New Ticket</button></div>';
+    return;
+  }
+  el.innerHTML=all.map(t=>ticketCard(t,false)).join('');
+}
+
+// ── RENDER ALL (admin) ───────────────────────────────────────────
+function renderAll(filter='open') {
+  const el=document.getElementById('all-content');
+  let ts=DB.tickets();
+  if(filter!=='all') ts=ts.filter(t=>t.status===filter);
+  el.innerHTML=ts.length ? ts.map(t=>ticketCard(t,true)).join('') : '<p class="cm" style="padding:20px">No '+filter+' tickets.</p>';
+}
+
+// ── TICKET CARD HTML ─────────────────────────────────────────────
+function ticketCard(t, admin) {
+  const sc={'open':'ts-open','replied':'ts-replied','waiting':'ts-waiting','closed':'ts-closed'}[t.status]||'ts-open';
+  const replies=(t.replies||[]).map(r=>`
+    <div class="tmsg${r.fromStaff?' staff':''}">
+      <div class="tmsg-from">
+        <span class="fn${r.fromStaff?' st':''}">${r.fromStaff?'⭐ '+(r.authorName||'Staff'):(r.authorName||t.name)}</span>
+        <span>${timeAgo(r.date)}</span>
+      </div>
+      <div class="tmsg-body">${esc(r.body)}</div>
+    </div>`).join('');
+
+  const replyUI = t.status!=='closed' ? `
+    <div class="reply-box">
+      <textarea class="ftxt finp" id="rb-${t.id}" rows="3" placeholder="${admin?'Reply as staff...':'Add more info or follow up...'}" style="min-height:65px"></textarea>
+      <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap">
+        <button class="btn btn-r btn-sm" onclick="addReply('${t.id}',${admin})">
+          ${admin?'Reply as Staff':'Add Reply'}
+        </button>
+        ${admin?`
+          <button class="btn btn-g btn-sm" onclick="closeTk('${t.id}')">✓ Close</button>
+          <button class="btn btn-gold btn-sm" onclick="waitTk('${t.id}')">⏳ Waiting</button>`:`
+          <button class="btn btn-o btn-sm" onclick="closeTk('${t.id}')">Close as Resolved</button>`}
+      </div>
+    </div>` :
+    `<div style="font-family:var(--fm);font-size:.6rem;color:var(--m2);padding:8px 0">Closed ${fmtDateTime(t.closedAt)}.
+    <button class="btn btn-o btn-sm" style="margin-left:6px" onclick="reopenTk('${t.id}')">Reopen</button></div>`;
+
+  const adminMeta = admin ? `<span class="mono" style="color:var(--ac);font-size:.58rem">${t.cid||'—'}</span><span class="mono" style="font-size:.58rem;color:var(--au)">${t.priority||'normal'}</span>` : '';
+
+  return `
+  <div class="ticket-card status-${t.status}" id="tc-${t.id}">
+    <div class="tcard-head" onclick="toggleTk('${t.id}')">
+      <span class="tcard-num">#${t.num}</span>
+      <span class="tcard-subj">${esc(t.subject)}</span>
+      <div class="tcard-meta">${adminMeta}<span>${t.cat}</span><span>${timeAgo(t.date)}</span>${(t.replies||[]).length?'<span style="color:var(--ac)">'+(t.replies.length)+' repl'+((t.replies.length)===1?'y':'ies')+'</span>':''}</div>
+      <span class="tstat ${sc}">${t.status}</span>
+    </div>
+    <div class="tcard-body" id="tb-${t.id}">
+      <div class="tmsg"><div class="tmsg-from"><span class="fn">${esc(t.name)}</span><span>${fmtDateTime(t.date)}</span></div><div class="tmsg-body">${esc(t.message)}</div></div>
+      ${replies}
+      ${replyUI}
+    </div>
+  </div>`;
+}
+
+function toggleTk(id){ document.getElementById('tb-'+id)?.classList.toggle('open'); }
+
+function addReply(id, admin) {
+  const ta=document.getElementById('rb-'+id);
+  if(!ta) return;
+  const body=ta.value.trim();
+  if(!body){UI.toast('Write a reply first.','error');return;}
+  DB.addReply(id,{body,fromStaff:admin,authorName:Auth.session?.name||(admin?'QFV Staff':'User'),cid:Auth.session?.cid||''});
+  if(!admin) DB.updateTicket(id,{status:'waiting'});
+  ta.value='';
+  updateBadge();
+  UI.toast(admin?'Reply sent!':'Reply added!');
+  if(admin) renderAll('open'); else renderMine();
+}
+function closeTk(id){ DB.closeTicket(id); updateBadge(); UI.toast('Ticket closed.'); if(Auth.isAdmin) renderAll('open'); else renderMine(); }
+function waitTk(id){ DB.updateTicket(id,{status:'waiting'}); UI.toast('Marked as waiting on user.'); renderAll(); }
+function reopenTk(id){ DB.reopenTicket(id); UI.toast('Ticket reopened.'); if(Auth.isAdmin) renderAll('open'); else renderMine(); }
+
+function updateBadge(){ const s=DB.ticketStats(); const el=document.getElementById('ocount'); if(el) el.textContent=s.open>0?'('+s.open+')':''; }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── INIT ─────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const sess=Auth.session;
+  const s=DB.settings();
+
+  initDT();
+
+  // Discord link
+  const dl=document.getElementById('disc-link'); if(dl) dl.href=s.discord_invite||'#';
+
+  // Show login prompt
+  if(!sess) document.getElementById('t-loginhint').style.display='flex';
+
+  // Pre-fill from session
+  if(sess){
+    const ne=document.getElementById('tf-name'), ce=document.getElementById('tf-cid');
+    if(ne&&sess.name) ne.value=sess.name;
+    if(ce&&sess.cid)  ce.value=sess.cid;
+    document.getElementById('stab-direct').style.display='inline-flex';
+  }
+
+  // Admin
+  if(Auth.isAdmin){
+    document.getElementById('stab-all').style.display='inline-flex';
+    updateBadge();
+  }
+
+  // Email buttons (set at runtime)
+  const setEmail=(id,to,cc)=>{
+    const el=document.getElementById(id); if(!el) return;
+    el.onclick=(e)=>{
+      e.preventDefault();
+      const sub=encodeURIComponent('[QFV] Support Enquiry');
+      window.location.href=cc?`mailto:${to}?cc=${cc}&subject=${sub}`:`mailto:${to}?subject=${sub}`;
+    };
+  };
+  setEmail('eml-p', EC.p);
+  setEmail('eml-v', EC.v);
+  setEmail('eml-b', EC.p, EC.v);
+
+  // Hero buttons
+  const hb=document.getElementById('hero-btns');
+  if(hb) hb.innerHTML=sess
+    ? '<button class="btn btn-r" onclick="sTab(\'new\',document.querySelector(\'.sup-tab\'))">New Ticket</button><button class="btn btn-a" onclick="sTab(\'mine\',document.getElementById(\'stab-mine\'))">My Tickets</button><button class="btn btn-o" onclick="sTab(\'direct\',document.getElementById(\'stab-direct\'))">Direct Email</button>'
+    : '<button class="btn btn-r" onclick="sTab(\'new\',document.querySelector(\'.sup-tab\'))">Submit a Ticket</button><button class="btn btn-a" onclick="UI.modal(\'login-modal\')">Log In to Track</button>';
+});
+</script>
+</body>
+</html>
