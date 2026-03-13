@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Military Division — Qantas Virtual QFV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="nav-slot"></div>
+<div id="modals-slot"></div>
+<div id="cookie-slot"></div>
+<main class="page">
+
+<section class="hero sec-mil" style="min-height:55vh">
+  <div class="hero-grid"></div>
+  <div class="hero-num" style="color:rgba(255,179,0,.04)">MIL</div>
+  <div class="hero-content">
+    <div class="h-eye" style="color:var(--au)">QFV Military Wing</div>
+    <h1 class="h-title"><span class="ht1">MILITARY</span><br><span class="ht-au">DIVISION</span></h1>
+    <p class="h-sub">Special operations, tactical transport, maritime patrol. M1–M4 ratings. Restricted access — P2 + 10 hours required.</p>
+    <div class="h-pills"><span class="pill po">M1–M4 Ratings</span><span class="pill pr">Special Ops</span><span class="pill pa">Restricted Access</span></div>
+    <div class="h-btns"><a href="join.html" class="btn btn-gold">Apply for Military</a><a href="support.html" class="btn btn-o">Contact Command</a></div>
+  </div>
+</section>
+<section class="sec-sm sec-k2">
+  <div style="padding:0 48px"><div class="alert ao"><span class="a-icon">⚔</span><div class="a-body"><strong>Access Requirements:</strong> P2 (IR) rating + 10 logged QFV civilian hours + Military Division application approved by the Director of Pilot Training.</div></div></div>
+</section>
+<section class="sec sec-k">
+  <div class="s-eye">Military Ratings</div>
+  <h2 class="s-title">M0 → M4 Progression</h2>
+  <div class="s-rule"></div>
+  <div class="rtrack">
+    <div class="ri"><div class="ri-dot o">M0</div><div class="ri-t">No Military Rating</div><div class="ri-c o">DEFAULT</div><div class="ri-d">Civilian only.</div></div>
+    <div class="ri"><div class="ri-dot o">M1</div><div class="ri-t">Military Pilot Licence</div><div class="ri-c o">ENTRY</div><div class="ri-d">Military Induction + 10 mil. hours. Transport missions, basic exercises.</div><div class="ri-p">Unlocks: C-130 transport, basic patrol</div></div>
+    <div class="ri"><div class="ri-dot o">M2</div><div class="ri-t">Military Instrument Rating</div><div class="ri-c o">INTERMEDIATE</div><div class="ri-d">M1 + IFR military procedures + 25 mil. hours.</div><div class="ri-p">Unlocks: Night ops, maritime patrol</div></div>
+    <div class="ri"><div class="ri-dot o">M3</div><div class="ri-t">Military Multi-Engine</div><div class="ri-c o">ADVANCED</div><div class="ri-d">M2 + multi-engine military + 50 mil. hours.</div><div class="ri-p">Unlocks: C-17 Globemaster, KC-30A tanker</div></div>
+    <div class="ri"><div class="ri-dot o">M4</div><div class="ri-t">Military Mission Ready Pilot</div><div class="ri-c o">ELITE</div><div class="ri-d">M3 + 100 mil. hours + staff endorsement.</div><div class="ri-p">Unlocks: Special Ops, mission lead authority</div></div>
+  </div>
+</section>
+<section class="sec sec-mil">
+  <div class="s-eye">Military Fleet</div>
+  <h2 class="s-title">Aircraft</h2>
+  <div class="s-rule"></div>
+  <div class="tw"><table class="tbl"><thead><tr><th>Aircraft</th><th>Role</th><th>SimBrief</th><th>Min. Rating</th></tr></thead><tbody>
+    <tr><td class="to">C-130J Hercules</td><td>Tactical transport, paradrop, STOL</td><td class="mono tm">C13J</td><td class="to">M1</td></tr>
+    <tr><td class="to">C-17 Globemaster III</td><td>Strategic heavy airlift</td><td class="mono tm">C17</td><td class="to">M3</td></tr>
+    <tr><td class="to">KC-30A (A330 MRTT)</td><td>Air-to-air refuelling, transport</td><td class="mono tm">A332</td><td class="to">M3</td></tr>
+    <tr><td class="to">P-8A Poseidon</td><td>Maritime patrol, SAR</td><td class="mono tm">B738</td><td class="to">M2</td></tr>
+    <tr><td class="to">PC-21 Pilatus</td><td>Advanced trainer</td><td class="mono tm">PC21</td><td class="to">M1</td></tr>
+  </tbody></table></div>
+</section>
+</main>
+<div id="footer-slot"></div>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="ui.js"></script>
+<script>window.addEventListener('DOMContentLoaded',()=>UI.init('military.html'));</script>
+
+</body></html>
