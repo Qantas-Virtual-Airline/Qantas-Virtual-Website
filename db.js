@@ -32,7 +32,7 @@ const DB = {
     military_open:       true,
     roster_public:       true,
     maintenance:         false,
-    discord_invite:      'https://discord.gg/REPLACEME',
+    discord_invite:      'https://discord.gg/XR7h7Ybk5y',
     moodle_url:          'https://moodle.YOUR-DOMAIN.com',
     vatsim_client_id:    '',
     vatsim_oauth_on:     false,
